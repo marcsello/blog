@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block page_title %}Marcsello's Blog{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link href="style.css" rel="stylesheet"/>
+    <meta name="apple-mobile-web-app-title" content="{{ self.page_title() }}"/>
+    <meta property="og:site_name" content="THCentral"/>
+    <meta property="og:title" content="{{ self.page_title() }}"/>
+    <meta property="og:url" content="{{ site.url_base }}"/>
+    <meta property="article:author" content="Marcsello"/>
+    {% block og_extra_headers %}
+        <meta property="og:type" content="website"/>
+        <meta property="og:description" content="..."/>
+    {% endblock %}
+</head>
+<body>
+<div>
+    <main>
+        {% block content required %}{% endblock %}
+    </main>
+</div>
+</body>
+</html>

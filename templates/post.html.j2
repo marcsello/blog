@@ -1,0 +1,16 @@
+{% extends "base.html.j2" %}
+{% block page_title %}{{ post.meta.title }} - {{ super() }}{% endblock %}
+{% block og_extra_headers %}
+    <meta property="og:type" content="article"/>
+    <meta property="article:published_time" content="{{ post.meta.publish_date }}"/>
+    <meta property="article:tag" content="{{ post.meta.tags|join(',') }}"/>
+    <meta property="og:description" content="..."/>
+    {% if post.cover %}
+        <meta property="og:image" content="{{ post.cover }}"/>
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <div>
+        Post content
+    </div>
+{% endblock %}
