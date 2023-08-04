@@ -31,14 +31,14 @@ class LocalDirOutput(OutputBase):
         return os.path.join(self._local_dir, dst)
 
     def add_file(self, src: str, dst: str):
-        print(src, "->", dst)
+        print(" >", src, "->", dst)
         dst_full_path = self._compile_path(dst)
         dst_dir_name = os.path.dirname(dst_full_path)
         os.makedirs(dst_dir_name, exist_ok=True)
         shutil.copyfile(src, dst_full_path)
 
     def write_file(self, content: str, dst: str):
-        print("[GENERATED]", "->", dst)
+        print(" >", "[GENERATED]", "->", dst)
         dst_full_path = self._compile_path(dst)
         dst_dir_name = os.path.dirname(dst_full_path)
         os.makedirs(dst_dir_name, exist_ok=True)
