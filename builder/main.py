@@ -5,6 +5,7 @@ from .config import Config
 from .output import LocalDirOutput
 from .posts import iter_posts
 from .markdown_magic import render_markdown
+from .rss import generate_rss
 
 import jinja2
 
@@ -89,3 +90,6 @@ def main():
                 continue  # nothing to copy, skip
 
             o.add_file(os.path.join(post.source_dir, res), os.path.join(post.output_dir, res))
+
+    print("generate rss")
+    o.write_file(generate_rss(posts[:5]), Config.RSS_FILE_PATH)
