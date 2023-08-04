@@ -40,6 +40,8 @@ def main():
     for tag in tags:
         print(" *", tag)
 
+    jinja_env.globals.update(tags=tags)
+
     print("sort and organize posts")
     posts.sort(key=lambda p: p.meta['publish_date'], reverse=True)
 
@@ -57,7 +59,9 @@ def main():
         print(" *", tag)
         posts_with_tag = list(filter(lambda p: tag in p.meta['tags'], posts))
         ctx = {
-            "posts": posts_with_tag  # all posts ordered by date
+            "posts": posts_with_tag,  # all posts ordered by date
+            "list_base": "TAG",
+            "tag": tag
         }
         o.write_file(template.render(ctx), os.path.join("tag", tag + ".html"))
 

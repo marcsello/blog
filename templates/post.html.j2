@@ -6,11 +6,11 @@
     <meta property="article:tag" content="{{ post.meta.tags|join(',') }}"/>
     <meta property="og:description" content="..."/>
     {% if post.cover %}
-        <meta property="og:image" content="{{ post.cover }}"/>
+        <meta property="og:image" content="{{ '' }}"/>
     {% endif %}
 {% endblock %}
 {% block content %}
-    <div>
-        Post content
-    </div>
+    <article>
+        {{ content|safe }}
+    </article>
 {% endblock %}

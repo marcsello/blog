@@ -1,6 +1,13 @@
 {% extends "base.html.j2" %}
 {% block content %}
     <div>
-        list
+        #{{ tag }}
+    </div>
+    <div>
+        <ul>
+        {% for post in posts %}
+            <li><a href="/{{ post.output_dir }}/">{{ post.meta.title }}</a></li>
+        {% endfor %}
+        </ul>
     </div>
 {% endblock %}
