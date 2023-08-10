@@ -9,7 +9,8 @@ class MetaSchema(Schema):
     publish_date = fields.Date(allow_none=False)
     tags = fields.List(fields.Str(allow_none=False))
 
-    intro_override = fields.Str(allow_none=True, missing=None)  # optional
+    intro_override = fields.Str(allow_none=True, missing=None)  # optional, by default intro is the first-ish paragraph.
+    cover_override = fields.Str(allow_none=True, missing=None)  # optional, by default cover is the first image.
 
     @validates_schema(skip_on_field_errors=True)
     def validate_publish_date(self, data, partial, many):

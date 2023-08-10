@@ -1,6 +1,6 @@
+from abc import ABC, abstractmethod
 import os.path
 import shutil
-from abc import ABC, abstractmethod
 
 
 class OutputBase(ABC):
