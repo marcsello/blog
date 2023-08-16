@@ -1,6 +1,12 @@
+:root {
+    --bg: #00021c;
+    --text: #fff;
+    --link: #888;
+}
+
 body {
-    background-color: #000;
-    color: #fff;
+    background-color: var(--bg);
+    color: var(--text);
 }
 
 header {
@@ -10,8 +16,8 @@ header {
     margin: 0.5em 0;
 
     background-image:
-        conic-gradient(from  90deg at top    3px left  3px,#000 25%, #fff 0),
-        conic-gradient(from -90deg at bottom 3px right 3px,#000 25%, #fff 0);
+        conic-gradient(from  90deg at top    3px left  3px,var(--bg) 25%, #fff 0),
+        conic-gradient(from -90deg at bottom 3px right 3px,var(--bg) 25%, #fff 0);
     background-position:
         0 0,
         100% 100%;
@@ -25,7 +31,7 @@ header > h1 {
     padding: 0;
 }
 
-header > h2 {
+header > p {
     margin: 0;
     padding: 0;
     font-size: 1em;
@@ -49,28 +55,111 @@ aside#sidebar {
     padding-left: 1em;
 }
 
-div#footer {
+footer#page-footer {
     padding-top: 5em;
 }
 
-ul#tags-listing {
+ul.tags-listing {
     padding: 0;
 }
 
-ul#tags-listing > li {
+ul.tags-listing > li {
     display: inline-block;
 }
+
 
 img.icon {
     height: 1em;
 }
 
 a.dont-bother {
-    color: #fff;
+    color: var(--text);
+    font-weight: normal;
+}
+
+a.dont-bother:hover {
     text-decoration: none;
 }
 
-a:not(.dont-bother) {
+a {
     font-weight: bold;
-    color: #eee;
+    color: var(--link);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+h1#post-title {
+    font-size: 2em;
+    padding: 0;
+    margin: 0;
+}
+
+/* post tags are right bellow post-title */
+ul#post-tags {
+    font-size: .95em;
+}
+
+div#post-header {
+    display: block;
+    padding: 1em 0;
+}
+
+article#post-content {
+    line-height: 24px;
+}
+
+div#post-footer {
+    font-style: italic;
+    color: #82989a;
+    display: block;
+    width: 100%;
+    text-align: right;
+    padding: 2em 0;
+}
+
+article img {
+    max-width: 100%;
+}
+
+article > p:has(> img) {
+    text-align: center;
+}
+
+p.sidebar-section-header {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    font-weight: bold;
+}
+
+ul#posts-listing {
+    padding: 0;
+    list-style-type: none;
+}
+
+ul#posts-listing li {
+    padding: 2em 0;
+    display: block;
+}
+
+a.posts-listing-link:hover h2 {
+    text-decoration: underline;
+}
+
+div.posts-listing-cover {
+    border-radius: 10px;
+    height: 400px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+div#tag-listing-header {
+    font-size: 2em;
+    font-weight: bold;
 }

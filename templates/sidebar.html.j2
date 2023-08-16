@@ -1,14 +1,30 @@
-<h1>About me</h1>
+<p class="sidebar-section-header">About me</p>
 <p>yolololololool</p>
-<h1>Tags</h1>
-<ul id="tags-listing">
+
+<p>
+    You may find me at these other places:
+    <ul>
+        <li>GitHub</li>
+        <li>Soundcloud</li>
+        <li>DeviantArt</li>
+        <li>https://marcsello.com</li>
+    </ul>
+</p>
+
+<p class="sidebar-section-header">Tags</p>
+<ul class="tags-listing" id="side-tags">
     {% for tag in tags %}
         <li><a href="/tag/{{ tag }}.html">#{{ tag }}</a></li>
     {% endfor %}
 </ul>
-<h1>Subscribe</h1>
+
+<p class="sidebar-section-header">Subscribe</p>
 <a href="{{ site.rss_feed_path }}"><img class="icon" src="/rss_icon.png" alt="RSS logo"/>&nbsp;RSS Feed</a>
-<div id="footer">
-    creative commons
-    2023
-</div>
+
+<p class="sidebar-section-header">Contact</p>
+<p>marcsello@derpymail.org</p>
+
+<footer id="page-footer">
+    <!-- TODO: include github repo link, with a note that this is hand-crafted -->
+    <p><small>2014 - 2023</small></p>
+</footer>

@@ -11,6 +11,8 @@
     <meta property="og:title" content="{{ self.page_title() }}"/>
     <meta property="og:url" content="{{ site.url_base }}"/>
     <meta property="article:author" content="Marcsello"/>
+    <meta name="robots" content="all">
+    <link rel="canonical" href="{{ site.url_base }}">
     <link rel="alternate" type="application/rss+xml" title="RSS Feed for Marcsello's blog" href="{{ site.rss_feed_path }}">
     {% block og_extra_headers %}
         <meta property="og:type" content="website"/>
@@ -21,9 +23,9 @@
 <div class="bootstrap-wrapper">
     <div class="container" id="base">
         <a id="header-holder" href="/" class="row dont-bother">
-            <header class="col-md-9">
+            <header class="col-lg-9" role="banner">
                 <h1>Marcsello's blog</h1>
-                <h2>My very own blog</h2>
+                <p>My very own blog</p>
             </header>
         </a>
         <div class="row" id="content-holder">

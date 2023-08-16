@@ -1,19 +1,22 @@
 {% extends "base.html.j2" %}
 {% block content %}
     <div>
-        Hi! This is my blog.
+        <p>Hi! This is my blog.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum elit. Vestibulum augue risus, dignissim eu euismod in, eleifend eget tellus. Etiam at ante id mauris pellentesque hendrerit. Quisque eget felis sed diam tincidunt luctus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
     </div>
     <div>
-        <ul>
+        <ul id="posts-listing">
             {% for post in posts %}
-                <li><a href="/{{ post.output_dir }}/">{{ post.meta.title }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div>
-        <ul>
-            {% for tag in tags %}
-                <li><a href="/tag/{{ tag }}.html">{{ tag }}</a></li>
+                <li>
+                    <a href="/{{ post.output_dir }}/" class="posts-listing-link dont-bother">
+                    {% if post.cover %}
+                        <!-- TODO: show publish date -->
+                        <div class="posts-listing-cover" style="background-image: url('{{ post.cover }}')"></div>
+                    {% endif %}
+                    <h2>{{ post.meta.title }}</h2>
+                    <p>{{ post.intro }}</p>
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>
