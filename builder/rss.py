@@ -3,11 +3,11 @@ from datetime import datetime, timezone
 
 from feedgen.feed import FeedGenerator
 
-from .posts import PostRepr
+from .posts import Post
 from .config import Config
 
 
-def generate_rss(posts: list[PostRepr]) -> str:
+def generate_rss(posts: list[Post]) -> str:
     rss_link = urljoin(Config.URL_BASE, Config.RSS_FILE_PATH)
 
     fg = FeedGenerator()

@@ -4,27 +4,37 @@
     <meta charset="utf-8"/>
     <title>{% block page_title %}Marcsello's blog{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link href="style.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/bootstrap-grid.min.css"/>
+    <link rel="stylesheet" href="/style.css"/>
     <meta name="apple-mobile-web-app-title" content="{{ self.page_title() }}"/>
     <meta property="og:site_name" content="Marcsello's blog"/>
     <meta property="og:title" content="{{ self.page_title() }}"/>
     <meta property="og:url" content="{{ site.url_base }}"/>
     <meta property="article:author" content="Marcsello"/>
-    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Marcsello's blog" href="{{ [site.url_base, site.config.RSS_FILE_PATH]|urljoin }}">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Marcsello's blog" href="{{ site.rss_feed_path }}">
     {% block og_extra_headers %}
         <meta property="og:type" content="website"/>
-        <meta property="og:description" content="..."/>
+        <meta property="og:description" content="My very own blog"/>
     {% endblock %}
 </head>
 <body>
-<div>
-    <header>
-        <h1>Marcsello's blog</h1>
-        <h2>My very own blog</h2>
-    </header>
-    <main>
-        {% block content required %}{% endblock %}
-    </main>
+<div class="bootstrap-wrapper">
+    <div class="container" id="base">
+        <a id="header-holder" href="/" class="row dont-bother">
+            <header class="col-md-9">
+                <h1>Marcsello's blog</h1>
+                <h2>My very own blog</h2>
+            </header>
+        </a>
+        <div class="row" id="content-holder">
+            <main class="col-md-9" id="content">
+                {% block content required %}{% endblock %}
+            </main>
+            <aside class="col-md-3" id="sidebar">
+                {% include 'sidebar.html.j2' %}
+            </aside>
+        </div>
+    </div>
 </div>
 </body>
 </html>

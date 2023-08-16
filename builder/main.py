@@ -5,15 +5,13 @@ from urllib.parse import urljoin
 from .config import Config
 from .output import LocalDirOutput
 from .posts import iter_posts
-from .markdown_magic import parse_markdown
 from .rss import generate_rss
 
 import jinja2
 
 
-def init_jinja_env(build_timestamp:datetime) -> jinja2.Environment:
-
-    def _urljoin_filter(parts:list[str]) -> str:
+def init_jinja_env(build_timestamp: datetime) -> jinja2.Environment:
+    def _urljoin_filter(parts: list[str]) -> str:
         result = parts[0]
         for part in parts[1:]:
             result = urljoin(result, part)
@@ -24,7 +22,8 @@ def init_jinja_env(build_timestamp:datetime) -> jinja2.Environment:
     jinja_env.globals.update(site={
         "url_base": Config.URL_BASE,
         "build_timestamp": build_timestamp,
-        "config": { # only pass "safe" keys
+        "rss_feed_path": urljoin(Config.URL_BASE, Config.RSS_FILE_PATH),
+        "config": {  # only pass "safe" keys
             "RSS_FILE_PATH": Config.RSS_FILE_PATH
         }
     })
@@ -52,7 +51,10 @@ def main():
     for tag in tags:
         print(" *", tag)
 
-    jinja_env.globals.update(tags=tags)
+    ordered_tags = list(tags)
+    ordered_tags.sort()
+
+    jinja_env.globals.update(tags=ordered_tags)
 
     print("sort and organize posts")
     posts.sort(key=lambda p: p.meta['publish_date'], reverse=True)
@@ -71,7 +73,7 @@ def main():
 
         available_files = post.attached_files()
         for res in post.referenced_resources():
-            if res.startswith("http://"): # noqa
+            if res.startswith("http://"):  # noqa
                 print(" > [WARNING] HTTP RESOURCE LINKED:", res)
                 continue  # nothing to copy, skip
 

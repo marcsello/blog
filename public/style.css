@@ -1,3 +1,76 @@
-.test {
-    color: red;
+body {
+    background-color: #000;
+    color: #fff;
+}
+
+header {
+    font-family: "Courier", monospace;
+    display: block;
+    padding: 2em 2em !important;
+    margin: 0.5em 0;
+
+    background-image:
+        conic-gradient(from  90deg at top    3px left  3px,#000 25%, #fff 0),
+        conic-gradient(from -90deg at bottom 3px right 3px,#000 25%, #fff 0);
+    background-position:
+        0 0,
+        100% 100%;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+}
+
+header > h1 {
+    font-size: 3.2em;
+    margin: 0;
+    padding: 0;
+}
+
+header > h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+}
+
+
+#content-holder {
+    font-family: sans-serif;
+}
+
+
+main {
+
+}
+
+div#content-holder {
+    margin: 1em 0;
+}
+
+aside#sidebar {
+    padding-left: 1em;
+}
+
+div#footer {
+    padding-top: 5em;
+}
+
+ul#tags-listing {
+    padding: 0;
+}
+
+ul#tags-listing > li {
+    display: inline-block;
+}
+
+img.icon {
+    height: 1em;
+}
+
+a.dont-bother {
+    color: #fff;
+    text-decoration: none;
+}
+
+a:not(.dont-bother) {
+    font-weight: bold;
+    color: #eee;
 }

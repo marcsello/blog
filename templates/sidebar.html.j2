@@ -1,0 +1,14 @@
+<h1>About me</h1>
+<p>yolololololool</p>
+<h1>Tags</h1>
+<ul id="tags-listing">
+    {% for tag in tags %}
+        <li><a href="/tag/{{ tag }}.html">#{{ tag }}</a></li>
+    {% endfor %}
+</ul>
+<h1>Subscribe</h1>
+<a href="{{ site.rss_feed_path }}"><img class="icon" src="/rss_icon.png" alt="RSS logo"/>&nbsp;RSS Feed</a>
+<div id="footer">
+    creative commons
+    2023
+</div>

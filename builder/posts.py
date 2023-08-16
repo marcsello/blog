@@ -10,6 +10,7 @@ from .meta import load_meta_file
 
 _MD = marko.Markdown()
 
+
 def _extract_all_src(root) -> list:
     srcs = []
 
@@ -22,11 +23,18 @@ def _extract_all_src(root) -> list:
 
     return srcs
 
+
 def _extract_first_paragraph_text(root) -> str:
-    return "" # TODO
+    for child in root.children:
+        if isinstance(child, marko.block.Paragraph) and \
+                isinstance(child.children[0], marko.inline.RawText) and \
+                isinstance(child.children[0].children, str):
+            return child.children[0].children
+
+    return ""
+
 
 def _get_first_image_path(root) -> Optional[str]:
-
     if isinstance(root, marko.inline.Image):
         return root.dest
 
@@ -35,7 +43,7 @@ def _get_first_image_path(root) -> Optional[str]:
             img = _get_first_image_path(elm)
             if img:
                 return img
-    
+
     return None
 
 
@@ -43,12 +51,12 @@ class Post:
     def __read_markdown(self) -> str:
         with open(os.path.join(self.source_dir, Config.POST_SRC_CONTENT_FILE_NAME)) as f:
             return f.read()
-            
+
     def __doc(self):
         # TODO: cache
-        return _MD.parse(self.__read_markdown()) 
+        return _MD.parse(self.__read_markdown())
 
-    def __init__(self, id_:str):
+    def __init__(self, id_: str):
         self._id = id_
 
         # source dir
@@ -77,41 +85,82 @@ class Post:
             self._intro = _extract_first_paragraph_text(self.__doc())
             if len(self._intro) > 256:
                 self._intro = self._intro[:253] + "..."
-    
+
     @property
     def id(self) -> str:
+        """
+        id is basically the name of the folder the post were found in
+        :return: id string
+        """
         return self._id
-    
+
     @property
     def source_dir(self) -> str:
+        """
+        source dir is basically the posts source dir + post id
+        :return:
+        """
         return self._source_dir
 
     @property
     def output_dir(self) -> str:
+        """
+        output dir is basically just "posts" + year + post_id
+        year part is "_" for unpublished posts
+        it is relative to the output dir
+        :return:
+        """
         return self._output_dir
-    
+
     @property
     def meta(self) -> dict:
+        """
+        This is the direct, parsed version of the meta.yaml
+        :return:
+        """
         return self._meta
-    
+
     @property
-    def cover(self) -> str:
+    def cover(self) -> str | None:
+        """
+        This is the
+        :return:
+        """
         return self._cover
-    
+
     @property
     def intro(self) -> str:
+        """
+        Intro text for the post.
+        First paragraph, or overridden value from the meta yaml
+        :return:
+        """
         return self._intro
 
     def html(self) -> str:
+        """
+        Rendered html document
+        :return: html string
+        """
         return _MD.render(self.__doc())
 
     def attached_files(self) -> list[str]:
-        l = os.listdir(self.source_dir)
-        l.remove(Config.POST_SRC_META_FILE_NAME)
-        l.remove(Config.POST_SRC_CONTENT_FILE_NAME)
-        return l
+        """
+        List of files in the post's directory except the meta and content file
+        Those files count as "attachments"
+        :return:
+        """
+        listing = os.listdir(self.source_dir)
+        listing.remove(Config.POST_SRC_META_FILE_NAME)
+        listing.remove(Config.POST_SRC_CONTENT_FILE_NAME)
+        return listing
 
     def referenced_resources(self) -> list[str]:
+        """
+        List of all the resources referenced directly in the content file
+        (in form of links, or images)
+        :return:
+        """
         return _extract_all_src(self.__doc())
 
 
@@ -121,7 +170,7 @@ def iter_posts() -> Generator[Post, None, None]:
 
         if not post.meta['published']:
             if not Config.INCLUDE_UNPUBLISHED:
-                print(" >", post_dir, "is unpublished, skipping")
+                print(" >", post_id, "is unpublished, skipping")
                 continue
 
         print(" >", post.id)
