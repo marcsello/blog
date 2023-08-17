@@ -1,0 +1,41 @@
+{% macro big_article_listing(_posts) -%}
+    <ul id="posts-listing">
+        {% for post in _posts %}
+            <li>
+                <a href="/{{ post.output_dir }}/" class="posts-listing-link dont-bother">
+                    {% if post.cover %}
+                        <div class="posts-listing-cover-large" style="background-image: url('{{ post.cover }}')">
+                            <div class="posts-listing-cover-large-publish-date-hover">
+                                <time>{{ post.meta.publish_date.strftime("%Y %b %d.") }}</time>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <h2>{{ post.meta.title }}</h2>
+                    <p>{{ post.intro }}</p>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{%- endmacro %}
+{% macro small_article_listing(_posts) -%}
+    <ul id="posts-listing">
+        {% for post in _posts %}
+            <li>
+                <a href="/{{ post.output_dir }}/" class="posts-listing-link dont-bother">
+                    <div class="post-listing-small-holder">
+                        {% if post.cover %}
+                            <div class="posts-listing-cover-small" style="background-image: url('{{ post.cover }}')"></div>
+                        {% endif %}
+                        <div>
+                            <h2>{{ post.meta.title }}</h2>
+                            <p>{{ post.intro }}</p>
+                            <p><small>
+                                <time>{{ post.meta.publish_date.strftime("%Y %b %d.") }}</time>
+                            </small></p>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{%- endmacro %}

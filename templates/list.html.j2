@@ -1,14 +1,10 @@
 {% extends "base.html.j2" %}
+{% import "modules.j2" as m %}
 {% block content %}
     <div id="tag-listing-header">
         #{{ tag }}
     </div>
     <div>
-        <ul>
-        {% for post in posts %}
-            <!-- TODO: reuse from index -->
-            <li><a href="/{{ post.output_dir }}/">{{ post.meta.title }}</a></li>
-        {% endfor %}
-        </ul>
+         {{ m.big_article_listing(posts) }}
     </div>
 {% endblock %}

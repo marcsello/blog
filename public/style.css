@@ -4,6 +4,11 @@
     --link: #888;
 }
 
+mark {
+    background-color: #0c1e1e;
+    color: #82989a;
+}
+
 body {
     background-color: var(--bg);
     color: var(--text);
@@ -42,9 +47,8 @@ header > p {
     font-family: sans-serif;
 }
 
-
-main {
-
+.text-center {
+ text-align: center !important;
 }
 
 div#content-holder {
@@ -67,6 +71,14 @@ ul.tags-listing > li {
     display: inline-block;
 }
 
+ul.link-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+ul.link-list li {
+    margin: 0.1em 0;
+}
 
 img.icon {
     height: 1em;
@@ -120,6 +132,10 @@ div#post-footer {
     padding: 2em 0;
 }
 
+div#post-related {
+    margin-top: 3em;
+}
+
 article img {
     max-width: 100%;
 }
@@ -128,7 +144,7 @@ article > p:has(> img) {
     text-align: center;
 }
 
-p.sidebar-section-header {
+p.section-header {
     display: block;
     font-size: 1.5em;
     margin-block-start: 0.83em;
@@ -150,16 +166,49 @@ a.posts-listing-link:hover h2 {
     text-decoration: underline;
 }
 
-div.posts-listing-cover {
+div.posts-listing-cover-large {
     border-radius: 10px;
     height: 400px;
     width: 100%;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    position: relative;
+}
+
+div.posts-listing-cover-large-publish-date-hover {
+    background-color: #000;
+    padding: 0.5em;
+    border-radius: 7px;
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+}
+
+div.post-listing-small-holder {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+div.posts-listing-cover-small {
+    border-radius: 7px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    margin: 0 1em 0 .5em;
+    aspect-ratio: 1.4;
+    width: 100%;
+    min-width: 150px;
 }
 
 div#tag-listing-header {
     font-size: 2em;
     font-weight: bold;
+}
+
+div#huge-vertical-spacer-at-the-bottom {
+    height: 30vh;
 }

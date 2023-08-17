@@ -6,6 +6,7 @@ from .config import Config
 from .output import LocalDirOutput
 from .posts import iter_posts
 from .rss import generate_rss
+from .galaxy_brain import find_related_posts
 
 import jinja2
 
@@ -65,8 +66,14 @@ def main():
     for post in posts:
         print(" *", post.id)
 
+        # generate some related posts
+        related_posts = find_related_posts(post, posts)
+        for rp in related_posts:
+            print("   +", rp.id)
+
         ctx = {
             "post": post,
+            "related_posts": related_posts
         }
 
         o.write_file(template.render(ctx), os.path.join(post.output_dir, "index.html"))
@@ -110,3 +117,5 @@ def main():
 
     print("generate rss")
     o.write_file(generate_rss(posts[:5]), Config.RSS_FILE_PATH)
+
+    print("done, took", datetime.now() - build_timestamp)

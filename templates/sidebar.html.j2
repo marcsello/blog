@@ -1,30 +1,31 @@
-<p class="sidebar-section-header">About me</p>
+<p class="section-header">About me</p>
 <p>yolololololool</p>
 
 <p>
     You may find me at these other places:
-    <ul>
-        <li>GitHub</li>
-        <li>Soundcloud</li>
-        <li>DeviantArt</li>
-        <li>https://marcsello.com</li>
+    <ul class="link-list">
+        <li><a href="https://github.com/marcsello"><img class="icon" src="/icons/github_logo.png" alt="GitHub Logo" />&nbsp;GitHub</a></li>
+        <li><a href="https://soundcloud.com/marcsellohooves"><img class="icon" src="/icons/soundcloud_logo.png" alt="SoundCloud Logo" />&nbsp;Soundcloud</a></li>
+        <li><a href="https://www.deviantart.com/marcsello"><img class="icon" src="/icons/deviantart_logo.png" alt="Globe icon" />&nbsp;DeviantArt</a></li>
+        <li><a href="https://marcsello.com/"><img class="icon" src="/icons/globe_icon.png" alt="Globe icon" />&nbsp;marcsello.com</a></li>
     </ul>
 </p>
 
-<p class="sidebar-section-header">Tags</p>
+<p class="section-header">Tags</p>
 <ul class="tags-listing" id="side-tags">
     {% for tag in tags %}
         <li><a href="/tag/{{ tag }}.html">#{{ tag }}</a></li>
     {% endfor %}
 </ul>
 
-<p class="sidebar-section-header">Subscribe</p>
-<a href="{{ site.rss_feed_path }}"><img class="icon" src="/rss_icon.png" alt="RSS logo"/>&nbsp;RSS Feed</a>
+<p class="section-header">Subscribe</p>
+<a href="{{ site.rss_feed_path }}"><img class="icon" src="/icons/rss_icon.png" alt="RSS logo"/>&nbsp;RSS Feed</a>
 
-<p class="sidebar-section-header">Contact</p>
+<p class="section-header">Contact</p>
 <p>marcsello@derpymail.org</p>
 
-<footer id="page-footer">
-    <!-- TODO: include github repo link, with a note that this is hand-crafted -->
+<footer id="page-footer" class="text-center">
+    <p><mark>This site does not use cookies!</mark></p>
+    <p><small>Carefully crafted by Marcsello. Find source at <a href="https://github.com/marcsello/blog">GitHub</a></small></p>
     <p><small>2014 - 2023</small></p>
 </footer>
