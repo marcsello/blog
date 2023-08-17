@@ -13,6 +13,9 @@ def find_related_posts(post: Post, posts: list[Post]):
         filter(lambda p: p.id != post.id, posts)
     )
 
+    # bring this list to a deterministic order (it is probably already ordered, but try to be deterministic)
+    posts_no_self.sort(key=lambda p: p.meta['publish_date'])
+
     # find the latest post
     # in theory the posts are already ordered, but let's not build on assumptions
     latest_post = max(posts_no_self, key=lambda p: p.meta['publish_date'])
