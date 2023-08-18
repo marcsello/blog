@@ -1,9 +1,15 @@
 {% extends "base.html.j2" %}
 {% import "modules.j2" as m %}
 {% block content %}
-    <div>
-        <p>Hi! This is my blog.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec ipsum elit. Vestibulum augue risus, dignissim eu euismod in, eleifend eget tellus. Etiam at ante id mauris pellentesque hendrerit. Quisque eget felis sed diam tincidunt luctus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
+    <div class="cool-line-height">
+        <p class="bigger-text">Hi there! Welcome to my very own blog!</p>
+        <p>Every so often, I happen to build things that end up being surprisingly cool. And once in a while, these creations even prove to be actually useful.</p>
+        <p>
+            I've been thinking of building this blog for a while, primarily to document my past endeavors.
+            It would be cool if I could just pull out a documentation of my earlier works when I face similar problems, so I don't have to start from scratch each time a familiar challenge comes around.
+            And while I'm at copying and pasting my own work, I might just share it with the world. Who knows? Maybe someone out there will find something useful among them.
+        </p>
+        <p><small>And besides... every tech-head needs a blog, right?</small></p>
     </div>
     <div>
         {{ m.big_article_listing(posts) }}

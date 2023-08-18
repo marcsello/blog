@@ -84,6 +84,14 @@ img.icon {
     height: 1em;
 }
 
+.bigger-text {
+    font-size: 1.2em;
+}
+
+.cool-line-height {
+    line-height: 24px;
+}
+
 a.dont-bother {
     color: var(--text);
     font-weight: normal;
@@ -117,10 +125,6 @@ ul#post-tags {
 div#post-header {
     display: block;
     padding: 1em 0;
-}
-
-article#post-content {
-    line-height: 24px;
 }
 
 div#post-footer {
