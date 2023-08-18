@@ -54,6 +54,7 @@ class Post:
 
     def __doc(self):
         # TODO: cache
+        # TODO: Lower each heading level by one
         return _MD.parse(self.__read_markdown())
 
     def __init__(self, id_: str):
