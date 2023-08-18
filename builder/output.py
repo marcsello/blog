@@ -14,30 +14,31 @@ from .config import Config
 
 
 class OutputBase(ABC):
-    @abstractmethod
+
     def add_file(self, src: str, dst: str):
         """
         Add an already existing file to the output
         :param src: Real Path to an existing file on the local machine
         :param dst: Destination in the output, relative to webroot
         """
-        pass
+        # some output modules may copy filenames as-is which could cause problems later on
+        norm_dst = os.path.normpath(dst)
+        assert norm_dst != ".", "dest path would be the root dir"
 
-    @abstractmethod
+        print(" >", src, "->", norm_dst)
+        self._add_file_impl(src, norm_dst)
+
     def write_file(self, content: str, dst: str):
         """
         Write string to a file in the output
         :param content: String to be written
         :param dst: Destination in the output, relative to webroot
         """
-        pass
+        norm_dst = os.path.normpath(dst)
+        assert norm_dst != ".", "dest path would be the root dir"
 
-    @abstractmethod
-    def close(self):
-        """
-        Close the output
-        """
-        pass
+        print(" >", "[GENERATED]", "->", norm_dst)
+        self._write_file_impl(content, norm_dst)
 
     def add_folder(self, src_folder: str, dst: str):
         for root, _, files in os.walk(src_folder):
@@ -46,6 +47,21 @@ class OutputBase(ABC):
                 rel_dst_path = os.path.relpath(full_src_path, src_folder)
                 full_dst_path = os.path.join(dst, rel_dst_path)
                 self.add_file(full_src_path, full_dst_path)
+
+    @abstractmethod
+    def _add_file_impl(self, src: str, dst: str):
+        pass
+
+    @abstractmethod
+    def _write_file_impl(self, src: str, dst: str):
+        pass
+
+    @abstractmethod
+    def close(self):
+        """
+        Close the output
+        """
+        pass
 
 
 class LocalDirOutput(OutputBase):
@@ -57,15 +73,13 @@ class LocalDirOutput(OutputBase):
     def _compile_path(self, dst: str) -> str:
         return os.path.join(self._local_dir, dst)
 
-    def add_file(self, src: str, dst: str):
-        print(" >", src, "->", dst)
+    def _add_file_impl(self, src: str, dst: str):
         dst_full_path = self._compile_path(dst)
         dst_dir_name = os.path.dirname(dst_full_path)
         os.makedirs(dst_dir_name, exist_ok=True)
         shutil.copyfile(src, dst_full_path)
 
-    def write_file(self, content: str, dst: str):
-        print(" >", "[GENERATED]", "->", dst)
+    def _write_file_impl(self, content: str, dst: str):
         dst_full_path = self._compile_path(dst)
         dst_dir_name = os.path.dirname(dst_full_path)
         os.makedirs(dst_dir_name, exist_ok=True)
@@ -123,13 +137,13 @@ class WebployOutput(OutputBase):
         tarinfo.uname = ""
         tarinfo.mode = 0o644
 
-    def add_file(self, src: str, dst: str):
+    def _add_file_impl(self, src: str, dst: str):
         tarinfo = self._tar.gettarinfo(src, dst)
         self.__set_default_tarinfo(tarinfo)
         with open(src, "rb") as f:
             self._tar.addfile(tarinfo, f)
 
-    def write_file(self, content: str, dst: str):
+    def _write_file_impl(self, content: str, dst: str):
         data = content.encode("utf-8")
         tarinfo = tarfile.TarInfo(name=dst)
         self.__set_default_tarinfo(tarinfo)
