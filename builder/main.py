@@ -3,7 +3,7 @@ from datetime import datetime
 from urllib.parse import urljoin
 
 from .config import Config
-from .output import LocalDirOutput
+from .output import init_output
 from .posts import iter_posts
 from .rss import generate_rss
 from .galaxy_brain import find_related_posts
@@ -38,7 +38,7 @@ def main():
     print("init jinja2 env")
     jinja_env = init_jinja_env(build_timestamp)
     print("init output")
-    o = LocalDirOutput(Config.OUTPUT_DIR)
+    o = init_output()
     print("copy public")
     o.add_folder("public", ".")
     print("read posts")
@@ -115,7 +115,10 @@ def main():
         }
         o.write_file(template.render(ctx), os.path.join("tag", tag + ".html"))
 
+    # finalizing steps
     print("generate rss")
     o.write_file(generate_rss(posts[:5]), Config.RSS_FILE_PATH)
 
+    print("closing output")
+    o.close()
     print("done, took", datetime.now() - build_timestamp)
