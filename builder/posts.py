@@ -8,7 +8,35 @@ import marko.inline
 from .config import Config
 from .meta import load_meta_file
 
-_MD = marko.Markdown()
+
+class CustomRenderer(marko.HTMLRenderer):
+
+    def render_paragraph(self, element: marko.block.Paragraph) -> str:
+        if all(isinstance(c, marko.inline.Image) for c in element.children):
+            # prevent the surrounding <p> tag when rendering a figure, because the figure tag can not be placed inside a p
+            return self.render_children(element)
+        else:
+            return super().render_paragraph(element)
+
+    def render_heading(self, element: marko.block.Heading) -> str:
+        # Drop each heading one level bellow, because h1 is used for the main title only
+        level_override = element.level + 1
+        if level_override > 6:
+            level_override = 6
+
+        return f"<h{level_override}>{self.render_children(element)}</h{level_override}>\n"
+
+    def render_image(self, element: marko.inline.Image) -> str:
+        img_str = super().render_image(element)
+        url = self.escape_url(element.dest)
+        # we re-use title as caption
+        figcaption = ""
+        if element.title:
+            figcaption = f"<figcaption>{self.escape_html(element.title)}</figcaption>"
+        return f"""<figure><a target="_blank" href="{url}">{img_str}</a>{figcaption}</figure>"""
+
+
+_MD = marko.Markdown(renderer=CustomRenderer)
 
 
 def _extract_all_src(root) -> list:
@@ -54,7 +82,6 @@ class Post:
 
     def __doc(self):
         # TODO: cache
-        # TODO: Lower each heading level by one
         return _MD.parse(self.__read_markdown())
 
     def __init__(self, id_: str):
@@ -143,7 +170,12 @@ class Post:
         Rendered html document
         :return: html string
         """
-        return _MD.render(self.__doc())
+        # TODO: Lower each heading level by one
+        doc = self.__doc()
+        print(doc)
+        print(doc.children)
+
+        return _MD.render(doc)
 
     def attached_files(self) -> list[str]:
         """

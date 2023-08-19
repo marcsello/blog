@@ -4,6 +4,14 @@
     --link: #888;
 }
 
+.text-center {
+    text-align: center !important;
+}
+
+.text-muted {
+    color: #888;
+}
+
 mark {
     background-color: #0c1e1e;
     color: #82989a;
@@ -20,12 +28,10 @@ header {
     padding: 2em 2em !important;
     margin: 0.5em 0;
 
-    background-image:
-        conic-gradient(from  90deg at top    3px left  3px,var(--bg) 25%, #fff 0),
-        conic-gradient(from -90deg at bottom 3px right 3px,var(--bg) 25%, #fff 0);
-    background-position:
-        0 0,
-        100% 100%;
+    background-image: conic-gradient(from 90deg at top 3px left 3px, var(--bg) 25%, #fff 0),
+    conic-gradient(from -90deg at bottom 3px right 3px, var(--bg) 25%, #fff 0);
+    background-position: 0 0,
+    100% 100%;
     background-size: 30px 30px;
     background-repeat: no-repeat;
 }
@@ -47,10 +53,6 @@ header > p {
     font-family: sans-serif;
 }
 
-.text-center {
- text-align: center !important;
-}
-
 div#content-holder {
     margin: 1em 0;
 }
@@ -60,7 +62,12 @@ aside#sidebar {
 }
 
 footer#page-footer {
-    padding-top: 5em;
+    padding-top: 8em;
+    font-size: 0.85em;
+}
+
+footer#page-footer > p {
+    margin-bottom: 2em;
 }
 
 ul.tags-listing {
@@ -140,11 +147,23 @@ div#post-related {
     margin-top: 3em;
 }
 
-article img {
+figure {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+figure img {
     max-width: 100%;
 }
 
-article > p:has(> img) {
+figure > a > img {
+    cursor: zoom-in;
+}
+
+figure > figcaption {
+    font-style: italic;
+    font-size: 0.9em;
     text-align: center;
 }
 

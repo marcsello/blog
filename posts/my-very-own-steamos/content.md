@@ -21,7 +21,7 @@ Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculu
 In ornare ipsum et dignissim cursus. Curabitur sem arcu, dictum sit amet tortor non, bibendum blandit ipsum. Aenean et venenatis nibh. Donec ut eros in urna faucibus dignissim in id odio. Cras laoreet nibh venenatis erat volutpat viverra at at nunc. Cras tincidunt laoreet quam, ut pulvinar elit efficitur dapibus. Mauris sit amet lacus condimentum, lacinia augue eu, ornare ex. Ut bibendum vestibulum nisi, quis placerat nisi placerat ac.
 
 
-![](https://placehold.co/354x410)
+![retek](https://placehold.co/354x410 "ez lehetne egy retek is")
 
 
 [this is a link](http://retek.hu)
