@@ -4,7 +4,7 @@
             <li>
                 <a href="/{{ post.output_dir }}/" class="posts-listing-link dont-bother">
                     {% if post.cover %}
-                        <div class="posts-listing-cover-large" style="background-image: url('{{ post.cover }}')">
+                        <div class="posts-listing-cover-large" style="background-image: url('/{{ post.output_dir }}/{{ post.cover }}')">
                             <div class="posts-listing-cover-large-publish-date-hover">
                                 <time>{{ post.meta.publish_date.strftime("%Y %b %d.") }}</time>
                             </div>
@@ -24,7 +24,7 @@
                 <a href="/{{ post.output_dir }}/" class="posts-listing-link dont-bother">
                     <div class="post-listing-small-holder">
                         {% if post.cover %}
-                            <div class="posts-listing-cover-small" style="background-image: url('{{ post.cover }}')"></div>
+                            <div class="posts-listing-cover-small" style="background-image: url('/{{ post.output_dir }}/{{ post.cover }}')"></div>
                         {% endif %}
                         <div>
                             <h2>{{ post.meta.title }}</h2>
