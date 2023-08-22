@@ -9,7 +9,7 @@ steps:
       - safety check --file builder/requirements.txt
 
   - name: build&publish
-    image: python:3.10
+    image: python:3.11
     environment:
       INCLUDE_UNPUBLISHED: 0
       OUTPUT_MODULE: webploy
@@ -18,7 +18,7 @@ steps:
       OUTPUT_WEBPLOY_URL:
         from_secret: WEBPLOY_URL
     commands:
-      - pip3 install -r builder/requirements
+      - pip3 install -r builder/requirements.txt
       - python3 -m builder
     when:
       branch:

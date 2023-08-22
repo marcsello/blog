@@ -1,5 +1,7 @@
 Contents of https://blog.marcsello.com
 
+[![Build Status](https://drone.k8s.marcsello.com/api/badges/marcsello/blog/status.svg)](https://drone.k8s.marcsello.com/marcsello/blog)
+
 Posts can be found under the /posts dir
 
 bootstrap-grid.min.css is directly included in this repo.
