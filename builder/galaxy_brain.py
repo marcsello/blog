@@ -16,6 +16,11 @@ def find_related_posts(post: Post, posts: list[Post]):
     # bring this list to a deterministic order (it is probably already ordered, but try to be deterministic)
     posts_no_self.sort(key=lambda p: p.meta['publish_date'])
 
+    # Return an empty list if there are no other posts
+    if not posts_no_self:
+        # This really is an edge case when only one post is published
+        return []
+
     # find the latest post
     # in theory the posts are already ordered, but let's not build on assumptions
     latest_post = max(posts_no_self, key=lambda p: p.meta['publish_date'])
