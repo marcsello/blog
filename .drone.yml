@@ -1,0 +1,35 @@
+kind: pipeline
+type: docker
+name: build
+
+steps:
+  - name: safety
+    image: pyupio/safety
+    commands:
+      - safety check --file builder/requirements.txt
+
+  - name: build&publish
+    image: python:3.10
+    environment:
+      INCLUDE_UNPUBLISHED: 0
+      OUTPUT_MODULE: webploy
+      OUTPUT_WEBPLOY_KEY:
+        from_secret: WEBPLOY_KEY
+      OUTPUT_WEBPLOY_URL:
+        from_secret: WEBPLOY_URL
+    commands:
+      - pip3 install -r builder/requirements
+      - python3 -m builder
+    when:
+      branch:
+        - main
+
+  - name: telegram
+    image: appleboy/drone-telegram
+    settings:
+      token:
+        from_secret: TELEGRAM_TOKEN
+      to:
+        from_secret: TELEGRAM_CHAT_ID
+    when:
+      status: [ failure ]
