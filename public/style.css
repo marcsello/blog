@@ -119,9 +119,27 @@ a:hover {
 }
 
 h1#post-title {
-    font-size: 2em;
+    font-size: 2.4em;
     padding: 0;
     margin: 0;
+}
+
+article h2 {
+    font-size: 1.7em;
+    margin-block-start: 1.2em;
+    margin-block-end: 1em;
+}
+
+article h3 {
+    font-size: 1.3em;
+    margin-block-start: 1.6em;
+    margin-block-end: 1em;
+}
+
+article h4 {
+    font-size: 1.15em;
+    margin-block-start: 1.8em;
+    margin-block-end: 1.33em;
 }
 
 /* post tags are right bellow post-title */
@@ -234,4 +252,15 @@ div#tag-listing-header {
 
 div#huge-vertical-spacer-at-the-bottom {
     height: 30vh;
+}
+
+pre {
+    display: block;
+    padding: 1.5em 1em;
+    margin: 1em 0;
+    border-radius: 20px;
+    background-color: #000;
+    color: #fff;
+    overflow-x: auto;
+    box-shadow: 0 0 17px 1px #005300;
 }
