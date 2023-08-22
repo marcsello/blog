@@ -170,12 +170,7 @@ class Post:
         Rendered html document
         :return: html string
         """
-        # TODO: Lower each heading level by one
-        doc = self.__doc()
-        print(doc)
-        print(doc.children)
-
-        return _MD.render(doc)
+        return _MD.render(self.__doc())
 
     def attached_files(self) -> list[str]:
         """

@@ -91,6 +91,8 @@ class LocalDirOutput(OutputBase):
 
 
 class WebployOutput(OutputBase):
+    seal_filename = "__SEAL__"
+
     class UploaderThread(threading.Thread):
         def __init__(self, url: str, key: str, read_f):
             super().__init__()
@@ -138,19 +140,34 @@ class WebployOutput(OutputBase):
         tarinfo.mode = 0o644
 
     def _add_file_impl(self, src: str, dst: str):
+        assert dst != self.seal_filename  # Prevent bogus seal
         tarinfo = self._tar.gettarinfo(src, dst)
         self.__set_default_tarinfo(tarinfo)
         with open(src, "rb") as f:
             self._tar.addfile(tarinfo, f)
 
     def _write_file_impl(self, content: str, dst: str):
+        assert dst != self.seal_filename  # Prevent bogus seal
         data = content.encode("utf-8")
         tarinfo = tarfile.TarInfo(name=dst)
         self.__set_default_tarinfo(tarinfo)
         tarinfo.size = len(data)
         self._tar.addfile(tarinfo, BytesIO(data))
 
+    def __write_seal(self):
+        # Seal is currently used to ensure that the whole archive has been sent without problem.
+        # Seal should be the "last" file in the archive, once it is written, the archive should be closed
+        # This could be later used to integrity checking
+        tarinfo = tarfile.TarInfo(name=self.seal_filename)
+        self.__set_default_tarinfo(tarinfo)
+        tarinfo.size = 0
+        self._tar.addfile(tarinfo)
+
     def close(self):
+        print(" > sealing")
+        self.__write_seal()  # Write the seal, as the last thing
+
+        print(" > finishing upload...")
         # close the archive
         self._tar.close()
 
@@ -174,6 +191,7 @@ class WebployOutput(OutputBase):
         if self._uploader.resp.status_code != 201:
             raise Exception("upload failed")
 
+        print(" > upload successful")
 
 def init_output() -> OutputBase:
     print(" > init", Config.OUTPUT_MODULE)

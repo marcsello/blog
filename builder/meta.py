@@ -1,13 +1,13 @@
 import yaml
 from marshmallow import Schema, fields, validates_schema, ValidationError, RAISE
-from marshmallow.validate import Length
+from marshmallow.validate import Length, Regexp
 
 
 class MetaSchema(Schema):
     title = fields.Str(validate=Length(min=1), allow_none=False)
     published = fields.Bool(missing=False, allow_none=False)
     publish_date = fields.Date(allow_none=False)
-    tags = fields.List(fields.Str(allow_none=False))
+    tags = fields.List(fields.Str(allow_none=False, validate=Regexp(r"^[a-z0-9]+$")))
 
     intro_override = fields.Str(allow_none=True, missing=None)  # optional, by default intro is the first-ish paragraph.
     cover_override = fields.Str(allow_none=True, missing=None)  # optional, by default cover is the first image.
