@@ -11,7 +11,7 @@ Once I've got to university, and got some scholarship money I started saving up 
 
 It was nothing spectacular, a 6th gen i3 processor, 8gb of ram, a GTX 1050Ti and 500 gigabytes of spinning rust. But it was all mine, and it was ready to embrace Valve's own SteamOS.
 
-![My Steam Box](steambox2.jpg "It went trough some upgrades since, it's got an SSD in place of the HDD and also the processor has been upgraded to an i5 one. Notice, that you can only really fit low profile video cards in here. The single high profile slot is does not have enough clearance of the CPU cooler.")
+![My Steam Box](steambox2.jpg "It went trough some upgrades since, it's got an SSD in place of the HDD and also the processor has been upgraded to an i5 one. Notice, that you can only really fit low profile video cards in here. The single high profile slot does not have enough clearance of the CPU cooler.")
 
 # Software troubles
 
