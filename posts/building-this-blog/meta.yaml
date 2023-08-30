@@ -1,7 +1,8 @@
 ---
 title: "Building this blog"
-published: false
-publish_date: "2023-09-01"
+published: true
+publish_date: "2023-08-31"
 tags:
   - blog
   - python
+  - coding
