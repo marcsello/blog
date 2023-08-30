@@ -171,6 +171,13 @@ figure {
     align-items: center;
 }
 
+@media (max-width: 768px) {
+    figure {
+        margin-inline-start: 0;
+        margin-inline-end: 0;
+    }
+}
+
 figure img {
     max-width: 100%;
 }
