@@ -216,7 +216,7 @@ a.posts-listing-link:hover h2 {
 
 div.posts-listing-cover-large {
     border-radius: 10px;
-    height: 400px;
+    aspect-ratio: 2;
     width: 100%;
     background-repeat: no-repeat;
     background-position: center;
