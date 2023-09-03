@@ -23,7 +23,7 @@ While I was in the dorm, I've heard of a new thing called Gamer OS which were la
 
 I've installed ChimeraOS. And it was awesome! Sure it had some flaws, but I assumed they will be fixed with later upgrades. They delivered exactly what I was looking for. An install-and-forget Linux OS for my living room.
 
-The web management was pretty nicely done, and I could even get some retro games running effortlessly. It just worked, and I loved it. 
+The web management was pretty nicely done, and I could even get some retro games running effortlessly. It just worked, and I loved it.
 
 _Until it doesn't._
 
@@ -32,11 +32,11 @@ One day, I've got a notification from Steam, that [Untitled Goose Game](https://
 Since I had some custom modifications here and there I thought that maybe I broke something, so I gave a good `blkdiscard` to the SSD, and re-installed ChimeraOS cleanly, to be greeted yet again by Gnome...
 
 After some fruitless googling, I've found a [lone Reddit post](https://www.reddit.com/r/linux_gaming/comments/154wo17/cant_switch_back_to_game_mode_in_chimeraos/) that pointed to the ChimeraOS Discord. (I highly against the idea, that people threat Discord as a forum of some kind, and lock out everyone else from finding solution to their problem, but it is what it is). And indeed [I've found what the problem was](https://discord.com/channels/560281725175988233/1133481947272859728/1133481947272859728) (but sadly, the suggested solution did not work for me).
-Long story short, ChimeraOS dropped support for Nvidia GPUs, and they only support AMD ones now. It just happened that ChimeraOS updated now, which had a bug, that broke my system. This was only a question of time since they did no longer test for Nvidia. I can't blame them, Nvidia really gives a hard time for the Linux community. 
+Long story short, ChimeraOS dropped support for Nvidia GPUs, and they only support AMD ones now. It just happened that ChimeraOS updated now, which had a bug, that broke my system. This was only a question of time since they did no longer test for Nvidia. I can't blame them, Nvidia really gives a hard time for the Linux community.
 
 _But I was mad._
 
-The hardware I had, and would be perfectly capable of running games, but some software wick-wacky prevented me from this. 
+The hardware I had, and would be perfectly capable of running games, but some software wick-wacky prevented me from this.
 I've looked up if it would be possible to painlessly just switch to AMD, but sadly they did not seem to manufacture low-profile gpus. (And I had problems with AMD as well, as my desktop have an AMD card). So I couldn't even fix my problem with money. So what could I do?
 
 # Time to re-invent the wheel!
@@ -46,6 +46,7 @@ _How hard would it be to build my own simplified "SteamOS"?_
 Turn's out, pretty easy, if you go for the bare minimum.
 
 So I've come up with the following plan:
+
 1. Install Debian
 2. Install Nvidia Drivers
 3. Install Steam
@@ -69,18 +70,19 @@ Also, not that it matters, but I've chosen to install everything on one big part
 After the installation was complete, I've logged in using SSH, so I can work from the comfort of my desktop PC.
 
 And started installing stuff! First we will need X, "drivers" for it and some utils to help us to work with it:
+
 ```bash
-$ sudo apt install xserver-xorg dbus libpam-systemd x11-common xserver-xorg-legacy x11-xserver-utils x11-xkb-utils dbus-x11 xserver-xorg-input-all xinit xterm
+sudo apt install xserver-xorg dbus libpam-systemd x11-common xserver-xorg-legacy x11-xserver-utils x11-xkb-utils dbus-x11 xserver-xorg-input-all xinit xterm
 ```
 
-I know, Wayland this and Wayland that. The sad truth is that (probably just my bad experience) if you want (somewhat) working proprietary Nvidia drivers in 2023 on your Linux desktop, you've gotta use Xorg. X is still very usable, and for this purpose, it will be sufficient. 
+I know, Wayland this and Wayland that. The sad truth is that (probably just my bad experience) if you want (somewhat) working proprietary Nvidia drivers in 2023 on your Linux desktop, you've gotta use Xorg. X is still very usable, and for this purpose, it will be sufficient.
 
 Along the utils I've mentioned, I've installed xinit and xterm, those are a great help when you are tinkering with X manually, which I needed while I figured everything out.
 
 Next it was time for PulseAudio! We will need sound after all.
 
 ```bash
-$ sudo apt install pulseaudio pavucontrol
+sudo apt install pulseaudio pavucontrol
 ```
 
 I know, I know, Pipewire...
@@ -90,32 +92,34 @@ I've also installed `pavucontrol`, for debugging purposes later.
 **Important:** by default, the Debian installer did not assign the primary user to the `input` group. This generally not a problem, but I've spent at least two hours (which was half of the time I spent on this project as a whole) figuring out that this was the issue why Steam couldn't use my controller. So to make controllers work, add the primary user to the `input` group:
 
 ```bash
-$ sudo usermod -a -G input <username>
+sudo usermod -a -G input <username>
 ```
 
 ## Install Nvidia Drivers
 
-This was quite simple. Debian packs Nvidia drivers and in my experience this is the most reliable way of having them properly installed and updated.  
+This was quite simple. Debian packs Nvidia drivers and in my experience this is the most reliable way of having them properly installed and updated.
 
 So, just enable non-free and contrib repos:
+
 ```bash
-$ sudo apt edit-sources
+sudo apt edit-sources
 ```
 
 ![repos](repos.png "Added `contrib`, `non-free` and `nonfree-firmware` repos")
 
 And install the drivers (along with some stuff we will need in the future)
+
 ```bash
-$ sudo apt update
-$ sudo apt install nvidia-driver mesa-vulkan-drivers mesa-utils
+sudo apt update
+sudo apt install nvidia-driver mesa-vulkan-drivers mesa-utils
 ```
 
 Keep in mind, that we want to install Steam here... that is still built for 32 bit in 2023. So we also have to install the 32 bit libs as well:
 
 ```bash
-$ sudo dpkg --add-architecture i386
-$ sudo apt update
-$ sudo apt install nvidia-driver-libs:i386 libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install nvidia-driver-libs:i386 libglx-mesa0:i386 mesa-vulkan-drivers:i386 libgl1-mesa-dri:i386
 ```
 
 After that I rebooted. Started X manually using `xinit` and checked `glxgears` and `glxinfo`. Everything was cool and good.
@@ -127,18 +131,19 @@ After that I rebooted. Started X manually using `xinit` and checked `glxgears` a
 This is also pretty simple, once you figure out some quirks, like I did. Thankfully Steam is available in the Debian 12 repos, once you enable `non-free` software (which I just did).
 
 ```bash
-$ sudo apt install steam-installer
+sudo apt install steam-installer
 ```
 
 **Fun fact:** you need to have lsof installed manually, as for some reason the Steam package does not depend on it, but it won't launch without it:
+
 ```bash
-$ sudo apt install lsof 
+sudo apt install lsof
 ```
 
 **Fun fact 2:** Steam depends on NetworkManager to it's networking related stuff. This isn't an issue on desktop, but the Gamepad UI is designed to also provide an interface for basic OS tasks (network management, mounting/unmounting sdcard, sound stuff). Without NetworkManager it can not tell the state of the network and maybe even (wrongly) assume that you are offline and refuse to go online. So we have to install that as well:
 
 ```bash
-$ sudo apt install NetworkManager
+sudo apt install NetworkManager
 ```
 
 And to let NetworkManger manage the wired interface, we have to remove all related config to it from `ifupdown`'s config:
@@ -159,11 +164,11 @@ iface lo inet loopback
 
 ## Come up with something to boot into Gamepad UI
 
-So this is the actual fun part of the project. I knew what I needed, and was sure about what I want to avoid. 
+So this is the actual fun part of the project. I knew what I needed, and was sure about what I want to avoid.
 
-First of all, I didn't wanted desktop mode (neither any support for using a mouse-keyboard). I just don't need it. I can understand why is it an integral part of "gaming" operating systems, such as SteamOS and ChimeraOS. But I find it a lot easier to fiddle with the system through the commandline, which I can do just fine over SSH or (if things go wrong) by switching VT.  
+First of all, I didn't wanted desktop mode (neither any support for using a mouse-keyboard). I just don't need it. I can understand why is it an integral part of "gaming" operating systems, such as SteamOS and ChimeraOS. But I find it a lot easier to fiddle with the system through the commandline, which I can do just fine over SSH or (if things go wrong) by switching VT.
 
-Secondly, I knew that I also needed some sort of window manager. From my previous experiments I knew that games (or even Steam) are having a hard time going full screen when running on raw X, they need a window manager to do this sort of thing. I looked into [gamescope](https://github.com/ValveSoftware/gamescope), which is what SteamOS and ChimeraOS uses... I know it's not exactly like a window manager (but instead a compositor, because it's for Wayland and Wayland does things differently)... but after a few minutes of reading, I decided, this is not what I needed... even through [it would have been available from the Debian repos](https://packages.debian.org/bookworm/gamescope). So instead, I went with plain and simple [Openbox](https://wiki.debian.org/Openbox). All well behaving games should full-screen themselves along with Steam anyway, so it seems like a perfect choice.   
+Secondly, I knew that I also needed some sort of window manager. From my previous experiments I knew that games (or even Steam) are having a hard time going full screen when running on raw X, they need a window manager to do this sort of thing. I looked into [gamescope](https://github.com/ValveSoftware/gamescope), which is what SteamOS and ChimeraOS uses... I know it's not exactly like a window manager (but instead a compositor, because it's for Wayland and Wayland does things differently)... but after a few minutes of reading, I decided, this is not what I needed... even through [it would have been available from the Debian repos](https://packages.debian.org/bookworm/gamescope). So instead, I went with plain and simple [Openbox](https://wiki.debian.org/Openbox). All well behaving games should full-screen themselves along with Steam anyway, so it seems like a perfect choice.
 
 So, considering the above, I've come up with this neat little script:
 
@@ -191,7 +196,7 @@ pulseaudio --kill
 
 These are only the bare bones needed to get started. Later I have ~~stolen~~ added many envvars, based on [ChimeraOS's source code](https://github.com/ChimeraOS/gamescope-session/blob/cdf6d4c18497fa00e7ee4c6342b16229a1eaa742/usr/share/gamescope-session/gamescope-session-script) to tailor Steam further for this purpose. Notice that I have also installed [feh](https://packages.debian.org/bookworm/feh) to set an X wallpaper so that I can have some graphics on the screen while Steam is starting up.
 
-After I was satisfied with my script, I needed something that launches it in an X session after startup. For this purpose [nodm](https://github.com/spanezz/nodm) seemed the simplest option of all. I've toyed with it before, and I thought it would be the perfect fit. This is how I configured it:  
+After I was satisfied with my script, I needed something that launches it in an X session after startup. For this purpose [nodm](https://github.com/spanezz/nodm) seemed the simplest option of all. I've toyed with it before, and I thought it would be the perfect fit. This is how I configured it:
 
 ```bash
 # /etc/default/nodm
@@ -230,8 +235,7 @@ NODM_MIN_SESSION_TIME=60
 NODM_X_TIMEOUT=30
 ```
 
-Notice, that I have added `-nocursor` to X options? That's right, by default X positions a cursor at the center of the screen, which wouldn't go away. So I've just disabled the entire X mouse doohickey. This, of course, prevents using any sort of mouse, but I wouldn't need that anyway. (I've tested it, and it seems like this does not affect Steam emulating the mouse for some games.)   
-
+Notice, that I have added `-nocursor` to X options? That's right, by default X positions a cursor at the center of the screen, which wouldn't go away. So I've just disabled the entire X mouse doohickey. This, of course, prevents using any sort of mouse, but I wouldn't need that anyway. (I've tested it, and it seems like this does not affect Steam emulating the mouse for some games.)
 
 # Future improvements
 
@@ -247,7 +251,7 @@ I'm currently having a plasma TV, so having static parts on the screen is a bit 
 
 So, I need something that changes these games to run in a borderless fullscreen window. I've already seem to [found useful info and some code](https://github.com/FreddyBLtv/borderless-fullscreen) on the matter, so I might update this post later, once I figure this part out.
 
-Although this wouldn't be an issue if I used Gamescope, so I might re-evaluate my possibilities regarading that. 
+Although this wouldn't be an issue if I used Gamescope, so I might re-evaluate my possibilities regarading that.
 
 ## Replace nodm
 
@@ -259,7 +263,7 @@ So sadly, nodm has to go. There are a few possible alternatives, as nodm's autho
 
 ## Add emulators
 
-What was super-cool about ChimeraOS is its built-in emulators. It was super easy to add and play retro games. I've actually miss this feature.
+What was super-cool about ChimeraOS is its built-in emulators. It was super easy to add and play retro games. I'm actually missing this feature.
 
 It would be nice to install some emulators and play retro games on my TV again.
 
