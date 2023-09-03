@@ -1,0 +1,9 @@
+# MD013/line-length - Line length
+MD013:
+  line_length: 190 # <- my comfortable IDE width
+  code_blocks: false
+
+
+# MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading
+# we use a separate title field in the meta for this
+MD041: false
