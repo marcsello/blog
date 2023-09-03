@@ -11,7 +11,7 @@ steps:
   - name: markdown lint
     image: tmknom/markdownlint
     commands:
-      - /home/nonroot/entrypoint.sh posts/
+      - bash /home/nonroot/entrypoint.sh posts/
 
   - name: build&publish
     image: python:3.11
