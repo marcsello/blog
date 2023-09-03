@@ -8,6 +8,11 @@ steps:
     commands:
       - safety check --file builder/requirements.txt
 
+  - name: markdown lint
+    image: tmknom/markdownlint
+    commands:
+      - /home/nonroot/entrypoint.sh posts/
+
   - name: build&publish
     image: python:3.11
     environment:
