@@ -27,13 +27,20 @@ class CustomRenderer(marko.HTMLRenderer):
         return f"<h{level_override}>{self.render_children(element)}</h{level_override}>\n"
 
     def render_image(self, element: marko.inline.Image) -> str:
-        img_str = super().render_image(element)
         url = self.escape_url(element.dest)
+
+        if element.dest.endswith(".mp4"):  # we treat mp4 like gif...
+            figure_content = f"""<video autoplay loop muted playsinline><source src="{url}" type="video/mp4"></video>"""
+        else:
+            img_str = super().render_image(element)
+            figure_content = f"""<a target="_blank" href="{url}">{img_str}</a>"""
+
         # we re-use title as caption
         figcaption = ""
         if element.title:
             figcaption = f"<figcaption>{self.escape_html(element.title)}</figcaption>"
-        return f"""<figure><a target="_blank" href="{url}">{img_str}</a>{figcaption}</figure>"""
+
+        return f"""<figure>{figure_content}{figcaption}</figure>"""
 
 
 _MD = marko.Markdown(renderer=CustomRenderer)

@@ -182,6 +182,10 @@ figure img {
     max-width: 100%;
 }
 
+figure video {
+    max-width: 100%;
+}
+
 figure > a > img {
     cursor: zoom-in;
 }

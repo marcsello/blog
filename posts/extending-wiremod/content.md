@@ -110,38 +110,50 @@ With this trick I was able to solve the short client timeout issue it seems.
 
 The problem with the 3 seconds delay after each connection is that, after receiving an event, the request ends. 
 And the E2 have to wait 3 seconds before making a new one.
-That means that the fastest I can send in an event to the game is one every 3 seconds. 
-And if an event happened to happen while the chip is waiting to initiate a new connection, it would not just be delayed until the next connection but start a 3 sec timeout immediately... again. 
+That means that the fastest I can send in an event to the game is one every 3 seconds.
+And if an event happened to happen while the chip have no open connections and is waiting to initiate a new one, it would not just be delayed until the next connection but start a 3 sec timeout immediately... again. 
 This is still okay for most applications, but I was curious if I could somehow ease this limitation.
 (I could obviously set the cvar to a more favorable timeout, but I want this to work on any multiplayer server)
 
-So, here's an intriguing thought: Can we amp up the E2 chip to fire off multiple HTTP requests simultaneously? 
+So, here's an intriguing thought: Can we make the E2 chip to fire off multiple HTTP requests simultaneously? 
 With some clever coordination on the server-side, we can respond to only one connection at a time, while the remaining ones can seamlessly receive the subsequent events. 
 This does not solve the reconnection delay problem completely, but hopefully it makes it a little less painful.
 
 ![](multi_conn.png "A single E2 chip keeping alive 3 http requests at the same time. You can seen on the server log, that new connections are opened with 15sec delay, and after finishing one connection a new one is started about 3 seconds later.")
 
 To my amazement, I was able to make it keep up more than one connection without any problem.
-I have tested with 3 connections, and they were all successful and restarted after 3 seconds.
+I have tested with 3 connections, and they were all successful and restarted after 3 or 15 seconds (depending on when the last request were made).
 
-Now, it might be tempting to push the envelope and maintain an excessive number of connections, but that's a surefire way to strain our resources, and play with the admins patience, and we don't want to go there.
+Now, it might be tempting to go abusive and maintain an excessive number of connections, but that would again be playing with the admins patience, and we don't want to go there.
 So I'm planning to keep a healthy amount of 3 connections open only.
 
-Out of curiosity, I ran a test on my own server, to see how many connections can I keep open: It's 3. 
+But just out of curiosity, I ran a test on my own server, to see how many connections can I keep open: It's 3. 
 After firing the third request successive requests just don't happen. 
 It seems like they are started from the E2's perspective, but the actual HTTP request doesn't actually get executed by the server.
 
-I couldn't find the reason behind this in the [public source part of Gmod](https://github.com/Facepunch/garrysmod/tree/master). 
+I couldn't find the reason behind this in the [public source part of Gmod](https://github.com/Facepunch/garrysmod). 
 But by the looks of it, seems like this limitation is coming from the global HTTP client of Garry's mod (which is in the proprietary part).
 This is bad news, because that would mean that if affects all HTTP requests made by the server. So I had to dig deeper.
 
 After some tinkering with server-side Lua scripts and other E2 stuff, I uncovered three key insights:
-1. This limitation is specific to the URL's domain. Requests to different domains (or even subdomains) function as expected.
+1. This limitation is per-domain. Requests to different domains (or even subdomains) function as expected.
 2. The missing requests actually queue up somewhere and execute once other connections are closed. This aligns with my previous tests, where there were 10 chips each making a single connection, yet they eventually managed to establish connections.
 3. The restriction is indeed global. When any E2 chip makes 3 connections to the same domain, it blocks others, not even other server-side Lua scripts can make such connections.
 
-Surprisingly, these findings bring some silver linings. Firstly, they won't interfere with other HTTP requests from the server, so having three long-running connections won't cripple the server's ability to make unrelated HTTP requests (unless they're directed at my server).
-The requests won't go missing without a trace. We **could** even elevate this three connections limit by using multiple (sub) domains, but we really **don't have to** as the queued connections are happen immediately after another one is closed, effectively resolving the initial problem of the three-second connection delay. 
+Surprisingly, these findings bring some silver linings.
+Firstly, we possibly won't interfere with other HTTP requests from the server, having three long-running connections won't fully cripple the server's ability to make HTTP requests (unless they're directed at my server).
+The requests won't go missing without a trace.
+We **could** even elevate this three connections limit by using multiple (sub) domains.
+I won't fiddle with this as I'm happy with my 3 connection limit, but it shouldn't be complicated by using a wild-card domain, and randomly generating part of it each call. 
 
-So asking the E2 chip to make... let's say 5 connections should be a good deal, because it will only actually fire 3 connections which is good on server resources, should not count as abuse, and would provide enough requests queued up to kick in when needed.
-Things are looking bright once again!
+# Making the dream happen
+
+After all these research and experimenting, I felt like I'm ready to turn this into something.
+
+I have created a simple Go program 
+
+![](switch.jpg "The most comical switch I could find at home. I have attached tiny wires to it.")
+
+![](its_alive.mp4 "asdasdasd")
+
+# Conclusion
