@@ -25,6 +25,8 @@ A cool thing Wiremod introduces (among its plethora of cool stuff) is Expression
 It has its own coding language that implements various functionality that lets you read and manipulate those inputs, and control those outputs.
 But it does not stop just there, it has many other neat features like manipulating the physical world, spawning or breaking props, accessing the chat, etc.
 
+**Note:** _When I started working on this project, I wasn't yet aware of the [new events thing](https://github.com/wiremod/wire/wiki/Expression-2-Events) in Expression 2, so everything presented here might be a little old-fashioned, but still relevant._
+
 Although it's capabilities to communicate with the outside word is pretty limited. 
 It does implement one "extension" that restlessly tickles my fancy: **It's ability to make HTTP requests to the outside world.**
 See where this is going?
@@ -148,12 +150,54 @@ I won't fiddle with this as I'm happy with my 3 connection limit, but it shouldn
 
 # Making the dream happen
 
-After all these research and experimenting, I felt like I'm ready to turn this into something.
+After all these research and experimenting, I felt like I'm ready to turn all this into something useful.
 
-I have created a simple Go program 
+The E2 chip I'll plan to create will have a few simple numeric output.
+The value for each of these outputs will be our "state".
+The chip will connect to an HTTP service and wait for state updates.
+When it receives such an update it will set all of it's outputs accordingly.
 
-![](switch.jpg "The most comical switch I could find at home. I have attached tiny wires to it.")
+Based on this idea, and the other ideas I gathered while researching, I designed an HTTP service that does roughly the following:
+ - When a new connection arrives the server will send the headers immediately, and send a space character every 50s to keep up the connection.
+ - After 10 minutes, the server gracefully closes the connections by sending the last known state. This spares us having to implement any specific response identification and handling on the E2 side.
+ - State updates are pushed to this service on another endpoint. Upon receiving an update, the server only responds to (and thus closes) the oldest open connection.
+ - If it fails to deliver the message on this connection (the client disconnected for example) it will re-assign the message to the second-oldest connection, and then the third-oldest and so on, until it succeeds.
+ - The state is passed around in a simple flat JSON object, that's easy to parse using E2.
+ - Each "state update" have a strictly increasing identifier. Clients can include the id of the last event they aware of in the url when opening a connection. Using this the server can tell if the client is not up-to-date with the latest state and sends the update instantly. (This is useful for not missing events that happened when we were waiting for reconnection)
 
-![](its_alive.mp4 "asdasdasd")
+I have implemented all these in a [small Go program](https://github.com/marcsello/e2-extra-input-server). 
+I may have cut some corners (like hard-coding the data structure), but I'd say it's okay for an [MVP](https://en.wikipedia.org/wiki/Minimum_viable_product). 
+
+I have also created [the code for the Expression 2 chip](https://gist.github.com/marcsello/1f708a9cfd3c38ae4edd29991e225f18) in Gmod. 
+It opens three connections at most. 
+When it receives a response, it parses it and sets the outputs accordingly.
+There are not much going on beyond this, it records a few statistics and uses timers to do its thing.
+
+
+
+# Connecting the two words
+
+All that remains is to put something at the other end of all this. And what couldn't be more fitting than a big junk light switch?
+
+![](switch.jpg "The most comical switch I had at hand. It even had the ON-OFF positions marked from a previous project, and just the perfect amount of smudge.")
+
+I hooked up the light switch to my Raspberry Pi's [GPIO](https://en.wikipedia.org/wiki/General-purpose_input/output) pins (overkill I know, but the simplest solution right now), and created a simple Python script to call the other endpoint of the service when the switch is flipped. 
+By setting the state to 1 when the switch is closed and 0 when open, we can use this as a simple boolean value in Wiremod.
+
+<big>**Et voilà! I have a real world light switch, to switch imaginary lamps:**</big>
+
+![](its_alive.mp4 "A tiny bit delayed, but it definitely works!")
+
+
 
 # Conclusion
+
+Honestly, I love how this 
+
+- better controller instead of light switch
+- confirmed it's working on other servers
+
+- reconnect times
+- close stale connections
+
+![](reconnect_flow.png "\"reconnection\" times in practice")
