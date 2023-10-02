@@ -43,7 +43,7 @@ No headers, no other verbs, no HTTP status, no fancy options like timeout, but a
 
 The other problematic part of the E2 HTTP methods that they are rather costly (especially if you want to parse JSON). So rapid polling of something is completely out of question. 
 
-![The Expression 2 helper utility](e2helper.png "The httpRequest method costs a mere 20... marbles? the jsonDecode even more. In comparison common E2 function costs around 1-5 marbles.")
+![The Expression 2 helper utility twice](e2helper.png "The httpRequest method costs a mere 20... marbles? the jsonDecode even more. In comparison common E2 function costs around 1-5 marbles.")
 
 So we are stuck with a slow and costly way of state updating... but wait! **Maybe we can implement long-polling!**
 
@@ -57,7 +57,7 @@ We just need to make sure that we can open long-lived requests from E2.
 To test the long-polling "capabilities" of E2 I've [quickly hacked together a tool](https://github.com/marcsello/longPollTester) that starts an HTTP server and measures how long can a client keep up the connection. 
 I've started this tool on my computer, launched Garry's mod, started a single-player game to do some testing. 
 
-![](first_request.png "The first request!")
+![in-game screenshot with a console window above it, evidencing a successful HTTP request](first_request.png "The first request!")
 
 First, I've learned that for some reason E2 refuses to make requests towards `127.0.0.1`, but I've quickly overcome this by using the DNS name of my computer (fun fact: this is an [intentional limitation](https://wiki.facepunch.com/gmod/http.Fetch), but it seems like it's implemented badly). 
 Second, I have found out, that you indeed can not do rapid polling, as there is an approximately 3-second delay after each request when you are not allowed to make another one.
@@ -77,14 +77,14 @@ I was also curious how would multiple E2 chips affect each-other.
 And strangely enough, they did disturb each-other, but instead of the 3 second delay, it seemed initially that the individual chips had to wait a lot longer to get a chance to make a request. 
 But after a few minutes these delays normalized, and all E2 chips were seemingly able to make a request.
 
-![](test_farm.jpg "Testing concurrency, the red light means that a request is in progress.")
+![in-game screenshot of several E2 chips all making HTTP connections](test_farm.jpg "Testing concurrency, the red light means that a request is in progress.")
 
 
 After checking the convars, and digging up the Wiremod source code, I have found two convars `wire_expression2_http_timeout` and `wire_expression2_http_delay`. 
 The delay one is obviously the 3 sec delay between requests that I've already measured, but the timeout with 15 as it's value is a bit odd. 
  
 
-![](convars.png "Convars to control http timings")
+![screenshot from the game console displaying the two convars](convars.png "Convars to control http timings")
 
 [Turns out](https://github.com/wiremod/wire/blob/b43c615d86165240917bd5a86a130174538048d2/lua/entities/gmod_wire_expression2/core/http.lua#L19-L21) that value means the delay after the last request that is still pending. 
 That explains the weird behaviour I've observed above. 
@@ -102,7 +102,7 @@ I have quickly changed my long-poll tester utility to write out the headers as s
 And sure enough, I was able to keep up the connection a lot longer. 
 I went as far as 10 minutes with no issues.
 
-![](very_long.png "Three consecutive connections held up to 10 minutes while still successfully reading the input.")
+![in-game screenshot with a console window above it, evidencing a connection held open for 10 minutes](very_long.png "Three consecutive connections held up to 10 minutes while still successfully reading the input.")
 
 For the "keep-alive" data, I've chosen whitespace because I'm planning on sending trough JSON data, and JSON parsers are just ignore the whitespaces, so I won't be needing any extra fiddling with the data.
 
@@ -121,7 +121,7 @@ So, here's an intriguing thought: Can we make the E2 chip to fire off multiple H
 With some clever coordination on the server-side, we can respond to only one connection at a time, while the remaining ones can seamlessly receive the subsequent events. 
 This does not solve the reconnection delay problem completely, but hopefully it makes it a little less painful.
 
-![](multi_conn.png "A single E2 chip keeping alive 3 http requests at the same time. You can seen on the server log, that new connections are opened with 15sec delay, and after finishing one connection a new one is started about 3 seconds later.")
+![in-game screenshot with a console window above it, evidencing three active connections](multi_conn.png "A single E2 chip keeping alive 3 http requests at the same time. You can seen on the server log, that new connections are opened with 15sec delay, and after finishing one connection a new one is started about 3 seconds later.")
 
 To my amazement, I was able to make it keep up more than one connection without any problem.
 I have tested with 3 connections, and they were all successful and restarted after 3 or 15 seconds (depending on when the last request were made).
@@ -173,31 +173,45 @@ It opens three connections at most.
 When it receives a response, it parses it and sets the outputs accordingly.
 There are not much going on beyond this, it records a few statistics and uses timers to do its thing.
 
-
+![diagram](implementation_overview.png "A crude overview of how an update event is passed to the E2 chip while keeping multiple connections open.")
 
 # Connecting the two words
 
 All that remains is to put something at the other end of all this. And what couldn't be more fitting than a big junk light switch?
 
-![](switch.jpg "The most comical switch I had at hand. It even had the ON-OFF positions marked from a previous project, and just the perfect amount of smudge.")
+![an old dirty light switch](switch.jpg "The most comical switch I had at hand. It even had the ON-OFF positions marked from a previous project, and just the perfect amount of smudge.")
 
 I hooked up the light switch to my Raspberry Pi's [GPIO](https://en.wikipedia.org/wiki/General-purpose_input/output) pins (overkill I know, but the simplest solution right now), and created a simple Python script to call the other endpoint of the service when the switch is flipped. 
 By setting the state to 1 when the switch is closed and 0 when open, we can use this as a simple boolean value in Wiremod.
 
 <big>**Et voilà! I have a real world light switch, to switch imaginary lamps:**</big>
 
-![](its_alive.mp4 "A tiny bit delayed, but it definitely works!")
-
+![motion-picture showing the light switch controlling an in-game lamp](its_alive.mp4 "A tiny bit delayed, but it definitely works!")
 
 
 # Conclusion
 
-Honestly, I love how this 
+Honestly, I love how all this came together. This is really one of my Garry's mod playing child-hood dreams coming true. 
+It's obviously far from perfection. 
+That junky light-switch was just for the comic effect. 
+I think an Android app would be more fitting, that I could open on my phone, or tablet while playing.
+But I've played with the idea of building some sort of button cluster, and using some sort of microcontroller in place of the Raspberry Pi.
 
-- better controller instead of light switch
-- confirmed it's working on other servers
+I've since joined one of my current favourite Garry's mod server to play around with my funky new [human interface device](https://en.wikipedia.org/wiki/Human_interface_device).  
+And I can report that it works pretty well on actual multiplayer servers (although with greater delay).
+I've built some cool contraptions using it, and figured out some quirks I hadn't thought of before.
 
-- reconnect times
-- close stale connections
+First is that "reconnect" times (when the E2 chip makes a new connection in place of a closed one) isn't always going to be 3 seconds. 
+When updates arrive in quick succession we not only have to wait for the 3 seconds delay, but the 15 sec "timeout" as well caused by the previous new connection.
+So reconnection times can be anywhere between 3 and 15 seconds, depending on the rate of updates.
+I tried my best to illustrate it on the following diagram:
 
-![](reconnect_flow.png "\"reconnection\" times in practice")
+![diagram](reconnect_flow.png "\"reconnection\" times in practice. When a new connection replaces an old one, it starts another 15 sec delay while we can not make a new connection.")
+
+Another thing I didn't expect to have to pay attention to is that when I remove the E2 chip, and place it again later, there might stale connections still opened by the server to the service.
+So when I deploy the chip again somewhere else it seemingly does not receive the status updates.
+That's because of two things: 
+ - The Garry's mod server won't make the new connections for the same domain as there are already three connections open, instead these connections go into the magic queue.
+ - The service will always direct status updates to the oldest connection, which in this case are the stale connections that are left open.
+
+Thankfully flipping the switch a few times after deploying the new E2 chip solves all these issues, so not a great issue, once I figured out what's going on. 
