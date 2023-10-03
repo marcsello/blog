@@ -4,7 +4,7 @@ Sometimes, while I was in the middle of building the most advanced machines I co
 Therefore, I was constantly thinking of ways to add more input to the game. 
 
 This thought still bugs me today. Not because I'm still in a huge need of extra buttons, but rather because I'm intrigued by the problem itself.
-I'm definitely not playing as much as I used to, but out of nostalgia, I picked up the game again recently, so this  perfect weekend project.
+I'm definitely not playing as much as I used to, but out of nostalgia, I picked up the game again recently, and this turned out to be the perfect weekend project.
 
 Sure, you can hook up a joystick to your computer, and Garry's mod being a source game, would probably support using it with Wiremod stuff, but that's just about 10% interesting.
 
@@ -14,16 +14,16 @@ For those who does not know Wiremod, really should check it out first, because y
 For those who know it well probably does not need explanation on what is it, so you can skip to the next chapter. But for those who does not belong in either of these groups, may proceed reading the next few paragraphs. 
 
 Wiremod basically adds an imaginary electronics architecture to the game. It lets you spawn sensors, actuators, a diverse set of input and output things, and various sorts of control devices.
-But as the name suggests, the most powerful part of all these are wires! You can wire all these in any way you want. 
+But as the name suggests, the most powerful part of all these are wires! You can wire all these in any way you want. Unlike in the real world there isn't electrical current that's flowing in these wires, but data!
 All wire devices have inputs and outputs, often multiple, and you can choose how you wire those to your liking.
-Wires may carry multiple types of data, like numbers, strings, or even vectors and many other cool data structure.
+Wires can carry multiple types of data, like numbers, strings, or even vectors and many other cool data structures.
 
 ![]() TODO: image of advanced wire contraption.
 
 So basically anything you build will rely on passing data on wires. 
 Therefore, if you want to add an extra way of "input" to the game, all it has to implement are just wire outputs that represent what you provide on that "input", and you are all set.
 
-A cool thing Wiremod introduces (among its plethora of cool stuff) is Expression 2 (E2 for short)! Expression 2 basically lets you create custom chips in the game, with any sort of inputs and outputs and lets you run any custom code on that chip. 
+A cool thing Wiremod introduces (among its plethora of cool stuff) is Expression 2 (E2 for short)! Expression 2 basically lets you create custom chips in the game, with any sort of inputs and outputs and lets you run some custom code on that chip. 
 It has its own coding language that implements various functionality that lets you read and manipulate those inputs, and control those outputs.
 But it does not stop just there, it has many other neat features like manipulating the physical world, spawning or breaking props, accessing the chat, etc.
 
@@ -35,7 +35,7 @@ See where this is going?
 
 # The HTTP capabilities of Expression 2
 
-Sadly the `http*` functions this "extension" provides to E2 are very limited and poorly documented. So I had to do some digging and investigation.
+Sadly the `http*` functions this "extension" provides to E2 are very limited and poorly documented. So I had to do some code digging, investigation and experimenting.
 
 Basically E2 can only make `GET` requests, and you can only set the URL for the request.
 After the request has been made, you only get a single "boolean" (Wiremod does not actually have boolean, it uses number for that as well; fun fact: all numbers are floating point) to indicate if it was successful, and you can only obtain the response body as a string. 
@@ -54,7 +54,7 @@ By utilizing long-polling we can receive the "events" as soon as they occur (plu
 It seems like we could make this work somehow. 
 We just need to make sure that we can open long-lived requests from E2. 
 
-# Expression 2 and long polling
+# Expression 2 and long-polling
 
 To test the long-polling "capabilities" of E2 I've [quickly hacked together a tool](https://github.com/marcsello/longPollTester) that starts an HTTP server and measures how long can a client keep up the connection. 
 I've started this tool on my computer, launched Garry's mod, started a single-player game to do some testing. 
@@ -68,15 +68,15 @@ Regarding the long-polling capabilities, after some measurements it seems like I
 
 I have also discovered, that connections does not get closed after you delete the E2 chip. 
 I could only terminate the connection by quitting from the game. 
-So the server must close the connection eventually or the game will keep up the connection indefinitely, as there are no way to manually interrupt a pending HTTP request!  
+So the server must close the connection eventually or the game will keep up the connection indefinitely, as there are no way to manually interrupt a pending HTTP request!
 
 But the initial success in single-player didn't hold up much in multiplayer. 
 On my own server with default settings, **I couldn't make a request that lasted longer than 1 minute**. 
 When I went above just a few milliseconds, the request became unsuccessful. 
-This isn't great... Firing an HTTP request every 63 sec could be considered spamming by some administrators, which may lead to consequences.  
+This isn't great... Firing an HTTP request every 63 sec could be considered spamming by some administrators, which may lead to consequences.
 
-I was also curious how would multiple E2 chips affect each-other.
-And strangely enough, they did disturb each-other, but instead of the 3 second delay, it seemed initially that the individual chips had to wait a lot longer to get a chance to make a request. 
+I was also curious, how would multiple E2 chips affect each-other.
+So I've spawned a few of them, and strangely enough, they did disturb each-other, but instead of the 3 second delay, it seemed initially that the individual chips had to wait a lot longer to get a chance to make a request. 
 But after a few minutes these delays normalized, and all E2 chips were seemingly able to make a request.
 
 ![in-game screenshot of several E2 chips all making HTTP connections](test_farm.jpg "Testing concurrency, the red light means that a request is in progress.")
@@ -98,15 +98,15 @@ Thankfully these limits seems to be per-player based, so at least I won't upset 
 While experimenting with the timeout values, I had an idea: Some HTTP clients times out if they do not receive any data for a certain time period.
 In other words, they do not limit the time for the whole request, but only the idle time of the connection (waiting for data to be read).
 
-_What if I dropped a few bits of data every so often on the connection, would that prevent E2 from closing the connection?_
+_What if I dropped a few bits of data every so often on the connection?  Would that prevent E2 from closing the connection?_
 
 I have quickly changed my long-poll tester utility to write out the headers as soon as the client connects and write a single byte periodically to keep the connection alive. 
 And sure enough, I was able to keep up the connection a lot longer. 
 I went as far as 10 minutes with no issues.
 
-![in-game screenshot with a console window above it, evidencing a connection held open for 10 minutes](very_long.png "Three consecutive connections held up to 10 minutes while still successfully reading the input.")
+![in-game screenshot with a console window above it, evidencing a connection held open for 10 minutes](very_long.png "Three consecutive connections held up to 10 minutes, while still successfully reading the data.")
 
-For the "keep-alive" data, I've chosen whitespace because I'm planning on sending trough JSON data, and JSON parsers are just ignore the whitespaces, so I won't be needing any extra fiddling with the data.
+For the "keep-alive" byte, I've chosen whitespace, because I'm planning on sending trough JSON data, and JSON parsers are usually just ignore all whitespaces, so I won't be needed to do any extra fiddling with the response body other than passing it to the parser.
 
 With this trick I was able to solve the short client timeout issue it seems.
 
@@ -123,7 +123,7 @@ So, here's an intriguing thought: Can we make the E2 chip to fire off multiple H
 With some clever coordination on the server-side, we can respond to only one connection at a time, while the remaining ones can seamlessly receive the subsequent events. 
 This does not solve the reconnection delay problem completely, but hopefully it makes it a little less painful.
 
-![in-game screenshot with a console window above it, evidencing three active connections](multi_conn.png "A single E2 chip keeping alive 3 http requests at the same time. You can seen on the server log, that new connections are opened with 15sec delay, and after finishing one connection a new one is started about 3 seconds later.")
+![in-game screenshot with a console window above it, evidencing three active connections](multi_conn.png "A single E2 chip keeping alive 3 http requests at the same time. You can see on the server log, that new connections are opened after a 15sec delay, and after finishing one connection a new one is started about 3 seconds later.")
 
 To my amazement, I was able to make it keep up more than one connection without any problem.
 I have tested with 3 connections, and they were all successful and restarted after 3 or 15 seconds (depending on when the last request were made).
