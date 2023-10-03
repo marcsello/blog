@@ -193,20 +193,20 @@ By setting the state to 1 when the switch is closed and 0 when open, we can use 
 
 # Conclusion
 
-Honestly, I love how all this came together. This is really one of my Garry's mod playing child-hood dreams coming true. 
+Honestly, I love how it all came together. This really is one of my Garry's mod playing child-hood dreams come true. 
 It's obviously far from perfection. 
 That junky light-switch was just for the comic effect. 
-I think an Android app would be more fitting, that I could open on my phone, or tablet while playing.
-But I've played with the idea of building some sort of button cluster, and using some sort of microcontroller in place of the Raspberry Pi.
+I think an Android app, that I could open on my phone, or tablet while playing would be more fitting.
+But I've been toying with the idea of building some sort of button cluster, and using some sort of microcontroller in place of the Raspberry Pi.
 
-I've since joined one of my current favourite Garry's mod server to play around with my funky new [human interface device](https://en.wikipedia.org/wiki/Human_interface_device).  
-And I can report that it works pretty well on actual multiplayer servers (although with greater delay).
+I've since joined one of my current favourite Garry's mod servers to play around with my funky new [human interface device](https://en.wikipedia.org/wiki/Human_interface_device).  
+And I can report that it works pretty well on actual multiplayer servers (albeit with more lag).
 I've built some cool contraptions using it, and figured out some quirks I hadn't thought of before.
 
-First is that "reconnect" times (when the E2 chip makes a new connection in place of a closed one) isn't always going to be 3 seconds. 
-When updates arrive in quick succession we not only have to wait for the 3 seconds delay, but the 15 sec "timeout" as well caused by the previous new connection.
-So reconnection times can be anywhere between 3 and 15 seconds, depending on the rate of updates.
-I tried my best to illustrate it on the following diagram:
+The first is that "reconnect" times (when the E2 chip makes a new connection in place of a closed one) won't always be 3 seconds. 
+When updates come in quick succession, we not only have to wait for the 3 second delay, but also the 15 second "timeout" as well caused by the previous new connection.
+So reconnect times can be anywhere from 3 to 15 seconds, depending on the rate of updates.
+I've tried my best to illustrate this in the following diagram:
 
 ![diagram](reconnect_flow.png "\"reconnection\" times in practice. When a new connection replaces an old one, it starts another 15 sec delay while we can not make a new connection.")
 
