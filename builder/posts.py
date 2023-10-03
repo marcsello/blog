@@ -61,10 +61,20 @@ def _extract_all_src(root) -> list:
 
 def _extract_first_paragraph_text(root) -> str:
     for child in root.children:
-        if isinstance(child, marko.block.Paragraph) and \
-                isinstance(child.children[0], marko.inline.RawText) and \
-                isinstance(child.children[0].children, str):
-            return child.children[0].children
+        if isinstance(child, marko.block.Paragraph):
+            paragraph_str = ""
+            for part in child.children:
+                if isinstance(part, marko.inline.RawText) and isinstance(part.children, str):
+                    paragraph_str += part.children
+                if isinstance(part, marko.inline.LineBreak):
+                    if paragraph_str[-1:] != " ":
+                        paragraph_str += " "
+                if isinstance(part, marko.inline.Link):  # TODO: a recursive approach would be better here...
+                    for part_child in part.children:
+                        if isinstance(part_child, marko.inline.RawText) and isinstance(part_child.children, str):
+                            paragraph_str += part_child.children
+
+            return paragraph_str  # return after the first paragraph
 
     return ""
 
@@ -117,9 +127,17 @@ class Post:
         if 'intro_override' in self._meta and self._meta['intro_override']:
             self._intro = self._meta['intro_override']
         else:
-            self._intro = _extract_first_paragraph_text(self.__doc())
-            if len(self._intro) > 256:
-                self._intro = self._intro[:253] + "..."
+            intro_str = _extract_first_paragraph_text(self.__doc())
+            if len(intro_str) > 320:
+                intro_str = intro_str[:320]  # cut to length
+                # first try to cut at the last period, if it's not too far...
+                last_dot_pos = intro_str.rfind(".")
+                if 320 - last_dot_pos > 100:
+                    intro_str = intro_str[:last_dot_pos + 1]
+                else:
+                    intro_str += "..."  # If too far, just add more dots
+
+            self._intro = intro_str
 
     @property
     def id(self) -> str:
