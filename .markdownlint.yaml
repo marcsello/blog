@@ -10,3 +10,7 @@ MD041: false
 MD026:
   # Punctuation characters
   punctuation: ".,;:。，；：！" # <- allowed exclamation mark
+
+MD033:
+  allowed_elements:
+    - "big"
