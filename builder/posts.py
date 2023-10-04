@@ -214,7 +214,12 @@ class Post:
         (in form of links, or images)
         :return:
         """
-        return _extract_all_src(self.__doc())
+        refs = _extract_all_src(self.__doc())
+
+        if 'cover_override' in self._meta and self._meta['cover_override']:
+            refs.append(self._meta['cover_override'])
+
+        return refs
 
 
 def iter_posts() -> Generator[Post, None, None]:

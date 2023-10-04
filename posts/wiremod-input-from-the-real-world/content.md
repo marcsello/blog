@@ -18,7 +18,7 @@ But as the name suggests, the most powerful part of all these are wires! You can
 All wire devices have inputs and outputs, often multiple, and you can choose how you wire those to your liking.
 Wires can carry different types of data, like numbers, strings, or even vectors and many other cool structures.
 
-![]() TODO: image of advanced wire contraption.
+![some Wiremod components wired together](wire_stuff.jpg "Some Wiremod components wired together")
 
 So basically anything you build will rely on passing data on wires.
 Therefore, if you want to add an extra way of "input" to the game, all it has to implement are just wire outputs that represent what you provide on that "input", and you are all set.
@@ -217,3 +217,7 @@ That's because of two things:
 - The service will always direct status updates to the oldest connection, which in this case are the stale connections that are left open.
 
 Thankfully flipping the switch a few times after deploying the new E2 chip solves all these issues, so it's not a big deal once I figure out what's going on.
+
+Well, this concludes our journey here, I hope you found something useful or at least entertaining in this post.
+I definitely enjoyed finding my way around these absurd restrictions just to bring this heartfelt creation to life.
+But I have to figure out a way to keep my "weekend projects" from taking up almost two weeks.
