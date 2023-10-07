@@ -1,3 +1,4 @@
+<!-- cspell:ignore wiremod GPIO microcontroller -->
 This is one of those posts you can't really appreciate unless you spent part of your childhood building weird contraptions in [Garry's Mod](https://store.steampowered.com/app/4000/Garrys_Mod/) with some cool [Wiremod](https://wiremod.com/) bits.
 I was one of those kids.
 Sometimes, while I was in the middle of building the most advanced machines I could think of, I found myself running out of keys on my keyboard to control them.

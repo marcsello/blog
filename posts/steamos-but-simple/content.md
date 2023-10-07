@@ -1,4 +1,4 @@
-<!-- cspell:ignore HTPC -->
+<!-- cspell:ignore HTPC Xorg gamepad Pipewire Jackbox nodm Gamescope Openbox -->
 Those who know me, aren't surprised when I simply ignore that there are better solutions to a problem, and start engineering my own solution to it. Sadly, this isn't the case here.
 
 # My precious Steam Box
@@ -64,7 +64,7 @@ In the following few sections I will try to write things in a tutorial fashion, 
 That was simple. I got my trusty `blkdiscard`, and cleared the SSD. Then I installed Debian as anyone would do: Through the installer (I know at least seven ways to install Debian, that's why I pointed this out).
 
 I've installed the latest stable version as of today: Debian Bookworm. I figured stable just fits perfectly for this setup.
-During install, in [tasksel](https://wiki.debian.org/tasksel) I've chosen only to install the SSH server and nothing else. I want to install just what I need manually.
+During install, in [`tasksel`](https://wiki.debian.org/tasksel) I've chosen only to install the SSH server and nothing else. I want to install just what I need manually.
 
 Also, not that it matters, but I've chosen to install everything on one big partition. This wouldn't be the best choice for some scenarios... but for a living room PC, this is fine.
 
@@ -141,7 +141,7 @@ sudo apt install steam-installer
 sudo apt install lsof
 ```
 
-**Fun fact 2:** Steam depends on NetworkManager to it's networking related stuff. This isn't an issue on desktop, but the Gamepad UI is designed to also provide an interface for basic OS tasks (network management, mounting/unmounting sdcard, sound stuff). Without NetworkManager it can not tell the state of the network and maybe even (wrongly) assume that you are offline and refuse to go online. So we have to install that as well:
+**Fun fact 2:** Steam depends on NetworkManager to it's networking related stuff. This isn't an issue on desktop, but the Gamepad UI is designed to also provide an interface for basic OS tasks (network management, mounting/unmounting SD card, sound stuff). Without NetworkManager it can not tell the state of the network and maybe even (wrongly) assume that you are offline and refuse to go online. So we have to install that as well:
 
 ```bash
 sudo apt install NetworkManager
@@ -167,9 +167,9 @@ iface lo inet loopback
 
 So this is the actual fun part of the project. I knew what I needed, and was sure about what I want to avoid.
 
-First of all, I didn't wanted desktop mode (neither any support for using a mouse-keyboard). I just don't need it. I can understand why is it an integral part of "gaming" operating systems, such as SteamOS and ChimeraOS. But I find it a lot easier to fiddle with the system through the commandline, which I can do just fine over SSH or (if things go wrong) by switching VT.
+First of all, I didn't wanted desktop mode (neither any support for using a mouse-keyboard). I just don't need it. I can understand why is it an integral part of "gaming" operating systems, such as SteamOS and ChimeraOS. But I find it a lot easier to fiddle with the system through the command-line, which I can do just fine over SSH or (if things go wrong) by switching VT.
 
-Secondly, I knew that I also needed some sort of window manager. From my previous experiments I knew that games (or even Steam) are having a hard time going full screen when running on raw X, they need a window manager to do this sort of thing. I looked into [gamescope](https://github.com/ValveSoftware/gamescope), which is what SteamOS and ChimeraOS uses... I know it's not exactly like a window manager (but instead a compositor, because it's for Wayland and Wayland does things differently)... but after a few minutes of reading, I decided, this is not what I needed... even through [it would have been available from the Debian repos](https://packages.debian.org/bookworm/gamescope). So instead, I went with plain and simple [Openbox](https://wiki.debian.org/Openbox). All well behaving games should full-screen themselves along with Steam anyway, so it seems like a perfect choice.
+Secondly, I knew that I also needed some sort of window manager. From my previous experiments I knew that games (or even Steam) are having a hard time going full screen when running on raw X, they need a window manager to do this sort of thing. I looked into [`gamescope`](https://github.com/ValveSoftware/gamescope), which is what SteamOS and ChimeraOS uses... I know it's not exactly like a window manager (but instead a compositor, because it's for Wayland and Wayland does things differently)... but after a few minutes of reading, I decided, this is not what I needed... even through [it would have been available from the Debian repos](https://packages.debian.org/bookworm/gamescope). So instead, I went with plain and simple [Openbox](https://wiki.debian.org/Openbox). All well behaving games should full-screen themselves along with Steam anyway, so it seems like a perfect choice.
 
 So, considering the above, I've come up with this neat little script:
 
@@ -250,17 +250,17 @@ So, none of the games I've initially tested had this problem, but I've recently 
 
 I'm currently having a plasma TV, so having static parts on the screen is a bit problematic as it could burn in badly.
 
-So, I need something that changes these games to run in a borderless fullscreen window. I've already seem to [found useful info and some code](https://github.com/FreddyBLtv/borderless-fullscreen) on the matter, so I might update this post later, once I figure this part out.
+So, I need something that changes these games to run in a border-less full-screen window. I've already seem to [found useful info and some code](https://github.com/FreddyBLtv/borderless-fullscreen) on the matter, so I might update this post later, once I figure this part out.
 
-Although this wouldn't be an issue if I used Gamescope, so I might re-evaluate my possibilities regarading that.
+Although this wouldn't be an issue if I used Gamescope, so I might re-evaluate my possibilities regarding that.
 
 ## Replace nodm
 
 nodm is old... The [first commit was made in 2008](https://github.com/spanezz/nodm/commit/eebb441dba9acc9c2876824bac50c27d44c3b19e), which isn't a problem by itself, but sadly, as [its own README states](https://github.com/spanezz/nodm/blob/master/README.md#this-repository-is-not-maintained), it really needs to be refactored to stand up to today's standards, but the project got abandoned, so it won't seem to happen.
 
-There is also one inconvenience (which I was lazy to investigate deeper) but during shutdown nodm restarts the xsession. This causes Steam to restart for a short time then being killed soon after. I don't expect Steam to be prepared for this, so I can only wait until it corrupts something this way.
+There is also one inconvenience (which I was lazy to investigate deeper) but during shutdown nodm restarts the `xsession`. This causes Steam to restart for a short time then being killed soon after. I don't expect Steam to be prepared for this, so I can only wait until it corrupts something this way.
 
-So sadly, nodm has to go. There are a few possible alternatives, as nodm's author suggests, LightDM autologin is one possibility. I'm also thinking of doing some lower level magic with `xinit`, or directly starting X, but don't know which direction I would end up eventually.
+So sadly, nodm has to go. There are a few possible alternatives, as nodm's author suggests, LightDM's auto-login feature is one possibility. I'm also thinking of doing some lower level magic with `xinit`, or directly starting X, but don't know which direction I would end up eventually.
 
 ## Add emulators
 
@@ -274,4 +274,4 @@ Although it didn't turn out to be the prettiest solution, I have Steam now, and 
 
 Sure, maintaining it will be a bit more of a chore, than just having a fancy auto-update do everything for me. But I'm hoping for the best. By that, I mean, that a good old `apt update` and `apt upgrade` every few weeks will do it. I've kept custom hacks at a minimum, so there are fewer things to break with an update.
 
-Thank you for reading my very-first blogpost that I post on my very-own blog. This is sort of a debut post, I'm expecting better quality over time. Until then, have a great day!
+Thank you for reading my very-first blog post on my very-own blog. This is sort of a debut post, I'm expecting better quality over time. Until then, have a great day!
