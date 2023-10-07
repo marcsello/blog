@@ -16,7 +16,7 @@ steps:
   - name: spellcheck
     image: ghcr.io/streetsidesoftware/cspell:latest
     commands:
-      - --no-progress --show-context --language-id markdown --no-color --locale en 'posts/*/content.md'
+      - /app/index.js --no-progress --show-context --language-id markdown --no-color --locale en 'posts/*/content.md'
 
   - name: build&publish
     image: python:3.11
