@@ -1,3 +1,4 @@
+<!-- cspell:ignore HTPC -->
 Those who know me, aren't surprised when I simply ignore that there are better solutions to a problem, and start engineering my own solution to it. Sadly, this isn't the case here.
 
 # My precious Steam Box
