@@ -275,3 +275,41 @@ Although it didn't turn out to be the prettiest solution, I have Steam now, and 
 Sure, maintaining it will be a bit more of a chore, than just having a fancy auto-update do everything for me. But I'm hoping for the best. By that, I mean, that a good old `apt update` and `apt upgrade` every few weeks will do it. I've kept custom hacks at a minimum, so there are fewer things to break with an update.
 
 Thank you for reading my very-first blog post on my very-own blog. This is sort of a debut post, I'm expecting better quality over time. Until then, have a great day!
+
+# Update
+
+It turns out that, Openbox is pretty great when it comes to customization. You can even define selectors for specific application windows based on class, title, application name, and other factors, and you can apply various settings to those application windows. You can configure all of this in a simple XML file placed at `~/.config/openbox/rc.xml` (The global defaults are in `/etc/xdg/openbox/rc.xml` but it's not recommended to be changed).
+
+After studying the [documentation](http://openbox.org/wiki/Help:Configuration), I've come up with the following config:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_config xmlns="http://openbox.org/3.4/rc" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <desktops>
+        <number>1</number>
+        <popupTime>0</popupTime>
+    </desktops>
+
+    <resize>
+        <popupShow>Never</popupShow>
+    </resize>
+
+    <applications>
+        <application class="*">
+            <decor>no</decor>
+            <size>
+                <width>100%</width>
+                <height>100%</height>
+            </size>
+            <maximized>true</maximized>
+            <fullscreen>yes</fullscreen>
+        </application>
+    </applications>
+
+</openbox_config>
+```
+
+This config basically, hides some popups, sets the (initial) number of desktops to be 1. And most importantly makes all windows to show up full-screen or at least without decoration. [This reddit post](https://www.reddit.com/r/openbox/comments/cnul6v/how_do_i_hide_window_decorations_on_all_windows/) hinted me to the right direction.
+
+This fixed my problem with Jackbox games described above. I've tested all the games I've played before and they all seem to work just like before this configuration change.
