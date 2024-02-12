@@ -2,7 +2,7 @@ import os.path
 from datetime import datetime
 from urllib.parse import urljoin
 
-import output
+from . import output
 from .config import Config
 from .output_initializer import init_output
 from .posts import iter_posts
