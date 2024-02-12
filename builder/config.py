@@ -18,4 +18,7 @@ class Config:
     OUTPUT_LOCAL_DIR = os.environ.get("OUTPUT_LOCAL_DIR", "_dist")
 
     OUTPUT_WEBPLOY_URL = os.environ.get("OUTPUT_WEBPLOY_URL")
-    OUTPUT_WEBPLOY_KEY = os.environ.get("OUTPUT_WEBPLOY_KEY")
+    OUTPUT_WEBPLOY_SITE = os.environ.get("OUTPUT_WEBPLOY_SITE")
+    OUTPUT_WEBPLOY_USER = os.environ.get("OUTPUT_WEBPLOY_USER")
+    OUTPUT_WEBPLOY_PASSWORD = os.environ.get("OUTPUT_WEBPLOY_PASSWORD")
+    OUTPUT_WEBPLOY_META = os.environ.get("OUTPUT_WEBPLOY_META")

@@ -23,13 +23,16 @@ steps:
     environment:
       INCLUDE_UNPUBLISHED: 0
       OUTPUT_MODULE: webploy
-      OUTPUT_WEBPLOY_KEY:
-        from_secret: WEBPLOY_KEY
+      OUTPUT_WEBPLOY_SITE: "blog.marcsello.com"
       OUTPUT_WEBPLOY_URL:
         from_secret: WEBPLOY_URL
+      OUTPUT_WEBPLOY_USER:
+        from_secret: WEBPLOY_USER
+      OUTPUT_WEBPLOY_PASSWORD:
+        from_secret: WEBPLOY_PASSWORD
     commands:
       - pip3 install -r builder/requirements.txt
-      - python3 -m builder
+      - 'OUTPUT_WEBPLOY_META="${DRONE_BUILD_NUMBER}" python3 -m builder'
     when:
       branch:
         - main

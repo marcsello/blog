@@ -2,8 +2,9 @@ import os.path
 from datetime import datetime
 from urllib.parse import urljoin
 
+import output
 from .config import Config
-from .output import init_output
+from .output_initializer import init_output
 from .posts import iter_posts
 from .rss import generate_rss
 from .galaxy_brain import find_related_posts
@@ -35,10 +36,24 @@ def init_jinja_env(build_timestamp: datetime) -> jinja2.Environment:
 def main():
     build_timestamp = datetime.now()
     print("start", build_timestamp)
-    print("init jinja2 env")
-    jinja_env = init_jinja_env(build_timestamp)
     print("init output")
     o = init_output()
+    try:
+        run_build(o, build_timestamp)
+    except:
+        print("something went wrong, aborting output...")
+        o.abort()
+        raise
+
+    print("closing output")
+    o.close()
+
+    print("done, took", datetime.now() - build_timestamp)
+
+
+def run_build(o: output.OutputBase, build_timestamp: datetime):
+    print("init jinja2 env")
+    jinja_env = init_jinja_env(build_timestamp)
     print("copy public")
     o.add_folder("public", ".")
     print("read posts")
@@ -51,6 +66,8 @@ def main():
 
     for tag in tags:
         print(" *", tag)
+
+    raise Exception()
 
     ordered_tags = list(tags)
     ordered_tags.sort()
@@ -118,7 +135,3 @@ def main():
     # finalizing steps
     print("generate rss")
     o.write_file(generate_rss(posts[:5]), Config.RSS_FILE_PATH)
-
-    print("closing output")
-    o.close()
-    print("done, took", datetime.now() - build_timestamp)

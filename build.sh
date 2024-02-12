@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rm -r _dist
+rm -fr _dist
 
 python3 -m builder
