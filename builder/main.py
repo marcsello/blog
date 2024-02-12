@@ -67,8 +67,6 @@ def run_build(o: output.OutputBase, build_timestamp: datetime):
     for tag in tags:
         print(" *", tag)
 
-    raise Exception()
-
     ordered_tags = list(tags)
     ordered_tags.sort()
 
