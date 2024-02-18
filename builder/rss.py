@@ -13,7 +13,7 @@ def generate_rss(posts: list[Post]) -> str:
     fg = FeedGenerator()
     fg.id(Config.URL_BASE)
     fg.title("Marcsello's blog")
-    fg.author({'name': 'Marcsello', 'email': 'marcsello@derpymail.org'})
+    fg.author({'name': 'Marcsello', 'email': 'me@marcsello.com'})
     # fg.logo('http://ex.com/logo.jpg')
     fg.subtitle('My very own blog')
     fg.link(href=rss_link, rel='self')
