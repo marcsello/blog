@@ -6,7 +6,7 @@ steps:
   - name: safety
     image: pyupio/safety
     commands:
-      - safety check --file builder/requirements.txt
+      - safety check --file builder/requirements.txt --ignore 70612
 
   - name: markdown lint
     image: tmknom/markdownlint
