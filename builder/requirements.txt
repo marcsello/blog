@@ -1,7 +1,7 @@
 marko==2.1.2
 pyyaml==6.0.2
-jinja2==3.1.4
-marshmallow==3.22.0
+jinja2==3.1.5
+marshmallow==3.26.1
 feedgen==1.0.0
 
 # to use webploy
