@@ -75,7 +75,7 @@ There are also four identical looking diodes next to a large capacitor on the ma
 
 ![](internals2.jpg "This is as far as the wires allow to take it apart. The screws holding the main pcb, as well as the big transistor is visible.")
 
-While looking at the main PCB, I noticed that there is an integrated circuit on it! I was curious about what that does. According to the mark on it, it's an _LM8560_.  
+Looking at the main board, I noticed that there is an IC on it (actually there are more, but they're not that interesting)! I was curious what it does. According to the label on it, it's a _LM8560_.  
 
 ![](internals3.jpg "Quite a blurry picture. You can see the LM8560 chip... the brain of the whole alarm clock.")
 
@@ -86,7 +86,7 @@ I checked it's datasheet to find out more about it, and I've got to say, it is a
 Yes, it's an alarm-clock-on-a-chip! Isn't this cool?!
 
 Scanning through the datasheet, revealed me that really all the features of this device (except the radio part) are implemented on this single chip.
-It literally does everything, from handling the backup battery, through generating the alarm tone (yes, it can do that instead of turning on the radio, it can also beep in the morning) to driving the LED display.
+It literally does everything, from handling the backup battery, through generating the alarm tone (yes, it can do that. Instead of turning on the radio, it can also beep in the morning) to driving the LED display.
 
 It takes the 50/60 Hz frequency from the powerline and uses that as the time reference, but it also uses that signal to other things, like driving the common cathodes of the duplex LED display.  
 
@@ -102,7 +102,7 @@ All the wires I mentioned earlier are soldered to the main board. No connectors 
 
 I usually try to be the least destructive possible, so I decided to de-solder all wires instead of cutting them. I'm not sure what kind of solder they used, but it was surprisingly easy to do so. At 280°C, the solder melted just fine.
 
-I de-soldered the speaker and the battery connector, then I unscrewed the PCB on the top, for the buttons, and with that I could finally remove most the internals from the case.
+I de-soldered the speaker and the battery connector, then I unscrewed the PCB on the top, for the buttons, and with that I could finally remove most of the internals from the case.
 
 ![](internals_removed.jpg "A bunch of electronics removed from it's shell.")
 
@@ -110,7 +110,7 @@ There is one last thing that needs to be removed from the case (mostly for clean
 
 ![](speaker.jpg "It's glued in.")
 
-They used that ugly yellow glue, I just call "radio glue" to hold in the speaker. This is the kind of glue that was put on everywhere on all electronics in this era, for seemingly no other reason than just making repairs harder.
+They used that ugly yellow glue, I just call "radio glue" to hold the speaker. This is the kind of glue that was put on everywhere on all electronics in this era, for seemingly no other reason than just making repairs harder.
 I'm not sure what exactly that is, so I'm not exactly sure what should dissolve it. I also shouldn't experiment as I might risk damaging the plastic of the shell (Like I did later...) so I resorted to scraping off the glue in hope of freeing the speaker. 
 
 Eventually I managed to scrape off enough for it to come loose, and I could finally remove it. 
@@ -138,27 +138,53 @@ Luckily, I found out that I could restore it to its original look with black sho
 
 # Re-using parts
 
+Like I mentioned before, instead of replacing everything inside, it would be nice to keep and re-use a few parts. This would not only let me keep the original feel, but also should make my job easier.  
+
+Along with the battery terminals and the speaker, I also de-soldered the LED display and the top PCB that holds the buttons.
+
 ![](parts.jpg)
 
-Now that I have all the parts I'll probably keep. It's time to explore them in detail.
+Now that I have all these parts. It's time to explore them in detail, and figure out what worth saving.
 
 ## Top Buttons
 
+Honestly, I hoped for some micro-switches as it would be straightforward to replace and keep the board intact, but we are dealing with cheap electronics here, and cheap electronics come with cheap solutions.
 
+![](buttons.jpg "The top PCB")
 
-![](buttons.jpg)
+What we have here instead are metal dome switches, taped on the PCB with what looks like Cellux tape. This sure will be fun to refurbish. As I mentioned earlier, the seller told me that they are not very reliable. So I have to try to do something about that.
 
-![](buttons_schema.svg)
+The board has a seven-track ribbon cable. That's great, I assumed it would just have one common wire and one wire for the "other side" of each button. That would be the easiest to work with. 
+After inspecting the traces, however, and checking my assumption with the continuity function of my multimeter. Turns out it's not that simple.   
 
-![](buttons_datasheet.png)
+![](buttons_schema.svg "Reverse-engineered wiring diagram for the top board.")
+
+Pin 7 is the common line for the majority of buttons, except for `MIN` and `HOUR`, which both seem to use pin 5 for their common line. This is strange, because pin 5 is closed to pin 7 by the `TIME` button.
+
+Frankly, this arrangement had me scratching my head for a while. And when I looked at the datasheet of the IC, I was even more confused. I could not see what could be the reason for this fun arrangement.
+
+![](buttons_datasheet.png "All six buttons connected to a pin one-by-one. While having their common side connected to VSS.")
+
+Then I realized... While there are six pins on the IC, and six buttons on the top, they are not the same. There is no "Alarm-off" button on the top, that one is actually connected to the switch on the side of the clock, that one can use to... well... turn off the alarm.
+There is also no button input on the IC for "enabling" the clock setting, but still you can only set the time while holding down a button for it. This is solved by having the other side of the time setting buttons connected to the common trough the button that allows time setting.
+
+So what we have here is actually an "and gate," the `TIME` button has to be held down to allow the `HOUR` and `MIN` buttons to set the time. This is not implemented by the IC, but instead it's wired like that on the top board.
+
+I wonder if this will be a problem in the future or not, but either way, I need to keep this in mind when designing the new functionality of the buttons.  
 
 ## Display
 
+The display is a very iconic part of digital bedside alarm clocks of this era. Nice red 7-segment display with just enough digits and some extra segments for everything.
+
+19x72mm
+
 ![](display.jpg)
+
+In the future I would like to be able to dim the display, so it won't be as bright in the night. I'm not sure how I will achieve that trough.
 
 ## Speaker
 
-The speaker, while it's the most important part of this project, it's not very interesting. It's just an inexpensive 0.5 W 8 Ω speaker.
+The speaker, while it's the most important part of this project, it's not very interesting. It's just an inexpensive 0.5&nbsp;W 8&nbsp;Ω speaker.
 
 I connected a tiny LM386 based amplifier to test if it's still working. It sounds a bit crude, but it is indeed capable of emitting sound. I'm not sure if I'm going to keep it, or find a replacement for it, that might sound better. 
 That problem is for the future. I'm also yet to figure out which amplifier and how I will use, will it be an off-the-shelf board or maybe hack up something? I don't know yet.
@@ -171,6 +197,8 @@ I've decided to write blog posts about it as the project progresses, so maybe I 
 This post really is just a first step for this project. As I proceed, I plan to post more updates about it, and try to keep them a little shorter.
 
 Thank you for reading!
+
+---
 
 # Extra: Fun facts
 
