@@ -68,18 +68,18 @@ The transparent part can be taken off easily when the top is lifted, it's not gl
 
 Peeking inside the machine, we can see that there is a main circuit board which seems to hold all the important parts. This board is held in with two more screws.
 
-The PCB has some typical radio parts on it, like the ferrit rod antenna for AM reception, the variable capacitor thingy for tuning, and other stuff. Pretty typical cheap radio setup going on here, nothing unusual. 
+The PCB has some typical radio parts on it, like the ferrit rod antenna for AM reception, the variable capacitor thingy for tuning, and other stuff. Pretty typical cheap radio setup going on here, nothing unusual.
 
-There is also a (relative to modern things) big transformator. Indeed, no fancy switching power supply here. 
-There are also four identical looking diodes next to a large capacitor on the main board. I assume this is how the DC power is produced for the parts requiring it.    
+There is also a (relative to modern things) big transformator. Indeed, no fancy switching power supply here.
+There are also four identical looking diodes next to a large capacitor on the main board. I assume this is how the DC power is produced for the parts requiring it.
 
 ![](internals2.jpg "This is as far as the wires allow to take it apart. The screws holding the main pcb, as well as the big transistor is visible.")
 
-Looking at the main board, I noticed that there is an IC on it (actually there are more, but they're not that interesting)! I was curious what it does. According to the label on it, it's a _LM8560_.  
+Looking at the main board, I noticed that there is an IC on it (actually there are more, but they're not that interesting)! I was curious what it does. According to the label on it, it's a _LM8560_.
 
 ![](internals3.jpg "Quite a blurry picture. You can see the LM8560 chip... the brain of the whole alarm clock.")
 
-I checked it's datasheet to find out more about it, and I've got to say, it is a charming little chip. Check this out: 
+I checked it's datasheet to find out more about it, and I've got to say, it is a charming little chip. Check this out:
 
 ![](lm8560n.png)
 
@@ -88,9 +88,9 @@ Yes, it's an alarm-clock-on-a-chip! Isn't this cool?!
 Scanning through the datasheet, revealed me that really all the features of this device (except the radio part) are implemented on this single chip.
 It literally does everything, from handling the backup battery, through generating the alarm tone (yes, it can do that. Instead of turning on the radio, it can also beep in the morning) to driving the LED display.
 
-It takes the 50/60 Hz frequency from the powerline and uses that as the time reference, but it also uses that signal to other things, like driving the common cathodes of the duplex LED display.  
+It takes the 50/60 Hz frequency from the powerline and uses that as the time reference, but it also uses that signal to other things, like driving the common cathodes of the duplex LED display.
 
-It's a nice chip. I assume that it found its way to many other low-end alarm clocks, that I never heard of. It's also nice that we have the datasheet, because it will serve as a great reference for figuring out other parts of the clock. 
+It's a nice chip. I assume that it found its way to many other low-end alarm clocks, that I never heard of. It's also nice that we have the datasheet, because it will serve as a great reference for figuring out other parts of the clock.
 
 Moving on, removing the screws and the transformer allows us to take off the main board of the bottom.
 
@@ -111,9 +111,9 @@ There is one last thing that needs to be removed from the case (mostly for clean
 ![](speaker.jpg "It's glued in.")
 
 They used that ugly yellow glue, I just call "radio glue" to hold the speaker. This is the kind of glue that was put on everywhere on all electronics in this era, for seemingly no other reason than just making repairs harder.
-I'm not sure what exactly that is, so I'm not exactly sure what should dissolve it. I also shouldn't experiment as I might risk damaging the plastic of the shell (Like I did later...) so I resorted to scraping off the glue in hope of freeing the speaker. 
+I'm not sure what exactly that is, so I'm not exactly sure what should dissolve it. I also shouldn't experiment as I might risk damaging the plastic of the shell (Like I did later...) so I resorted to scraping off the glue in hope of freeing the speaker.
 
-Eventually I managed to scrape off enough for it to come loose, and I could finally remove it. 
+Eventually I managed to scrape off enough for it to come loose, and I could finally remove it.
 
 ![](speaker2.jpg "What a nice pattern.")
 
@@ -125,20 +125,20 @@ After that was done, I gave a bath for top shell, the buttons and the transparen
 
 For the bottom part, I didn't want the stickers to come off, so I cleaned it with a brush and wet wipe, it came out just as well.
 
-After drying it out, I put together the empty shell to see how it looks. I'm satisfied with the result. 
+After drying it out, I put together the empty shell to see how it looks. I'm satisfied with the result.
 
 ![](clean.jpg "A nice, clean, and empty radio alarm clock chell. Some spoilers in the background.")
 
 **WARNING:** As I couldn't get all of the ugly yellow glue off by scraping, and I didn't want to scrape the plastic too much, I started experimenting with some chemicals to remove it.
 **This was a bad idea!** I thought isopropyl alcohol can do little harm, but as it poured to the other side, and I wiped it, it seems like I wiped of some black paint.
-Since I didn't notice this at first, I kept wiping and when I realized what I've done, the top looked super-ugly...  I was sad and mad of how stupid I was...
+Since I didn't notice this at first, I kept wiping and when I realized what I've done, the top looked super-ugly... I was sad and mad of how stupid I was...
 I had no idea that the top was painted, but guess I know it now.
 
 Luckily, I found out that I could restore it to its original look with black shoe polish and some careful rubbing with a towel. After letting it dry, it looks good now. I have to be more careful from now on! Of course the glue didn't budge.
 
 # Re-using parts
 
-Like I mentioned before, instead of replacing everything inside, it would be nice to keep and re-use a few parts. This would not only let me keep the original feel, but also should make my job easier.  
+Like I mentioned before, instead of replacing everything inside, it would be nice to keep and re-use a few parts. This would not only let me keep the original feel, but also should make my job easier.
 
 Along with the battery terminals and the speaker, I also de-soldered the LED display and the top PCB that holds the buttons.
 
@@ -150,18 +150,18 @@ Now that I have all these parts. It's time to explore them in detail, and figure
 
 Honestly, I hoped for some micro-switches as it would be straightforward to replace and keep the board intact, but we are dealing with cheap electronics here, and cheap electronics come with cheap solutions.
 
-![](buttons.jpg "The top PCB")
+![](buttons.jpg "The top PCB. I assigned numbers to the lines of the ribbon cable. The cable is not twisted behind the board.")
 
 What we have here instead are metal dome switches, taped on the PCB with what looks like Cellux tape. This sure will be fun to refurbish. As I mentioned earlier, the seller told me that they are not very reliable. So I have to try to do something about that.
 
-The board has a seven-track ribbon cable. That's great, I assumed it would just have one common wire and one wire for the "other side" of each button. That would be the easiest to work with. 
-After inspecting the traces, however, and checking my assumption with the continuity function of my multimeter. Turns out it's not that simple.   
+The board has a seven-track ribbon cable. That's great, I assumed it would just have one common wire and one wire for the "other side" of each button. That would be the easiest to work with.
+After inspecting the traces, however, and checking my assumption with the continuity function of my multimeter. Turns out it's not that simple.
 
 ![](buttons_schema.svg "Reverse-engineered wiring diagram for the top board.")
 
 Pin 7 is the common line for the majority of buttons, except for `MIN` and `HOUR`, which both seem to use pin 5 for their common line. This is strange, because pin 5 is closed to pin 7 by the `TIME` button.
 
-Frankly, this arrangement had me scratching my head for a while. And when I looked at the datasheet of the IC, I was even more confused. I could not see what could be the reason for this fun arrangement.
+Frankly, this arrangement had me scratching my head for a while. And when I looked at the datasheet of the LM8560 IC, I was even more confused. I could not see what could be the reason for this fun arrangement.
 
 ![](buttons_datasheet.png "All six buttons connected to a pin one-by-one. While having their common side connected to VSS.")
 
@@ -170,29 +170,76 @@ There is also no button input on the IC for "enabling" the clock setting, but st
 
 So what we have here is actually an "and gate," the `TIME` button has to be held down to allow the `HOUR` and `MIN` buttons to set the time. This is not implemented by the IC, but instead it's wired like that on the top board.
 
-I wonder if this will be a problem in the future or not, but either way, I need to keep this in mind when designing the new functionality of the buttons.  
+I wonder if this will be a problem in the future or not, but either way, I need to keep this in mind when designing the new functionality of the buttons.
 
 ## Display
 
-The display is a very iconic part of digital bedside alarm clocks of this era. Nice red 7-segment display with just enough digits and some extra segments for everything.
+The display is a very iconic part of digital bedside alarm clocks of this era. A nice red 7-segment display with just enough digits and some extra segments for everything. It really gives the vibe I'm after.
 
-19x72mm
+The display used in this product is 19&nbsp;mm x 72&nbsp;mm in size. It is a duplex LED display with common cathode. This duplex thing was new to me, but it just means that it has more than one cathode, and the anodes are going to two or more segments, no black magic here.
 
-![](display.jpg)
+What was interesting to me is that the cathodes seemed to be connected to the output of the transformer (trough ~&nbsp;50&nbsp;Ω resistors). And indeed, looking at the application circuit from the LM8560 datasheet, this is what they recommend.
 
-In the future I would like to be able to dim the display, so it won't be as bright in the night. I'm not sure how I will achieve that trough.
+![](display_datasheet.png "Clever idea, the cathodes are driven directly by the 50 Hz from the grid, the IC only drives the anodes.")
+
+Now that we know some basics, it's time to figure out what are the "capabilities" of this display. To do this, I checked the traces on the main board, and compared it to the IC's datasheet. I've also done some testing with powering the pins of the display, to see what lights up.
+
+![](display_test.jpg "Illuminating segments one-by-one.")
+
+Thankfully, it was quite easy to figure out all that I needed to know. But there were some segments that no matter how I wire things, I just can't light up. I tried all pins in all combination (checked the pins that have no ribbon cable attached as well), but no luck.
+Some segments just do not seem to be wired up internally. It seems like the board under the leds is made for this very application, and it's not generic.
+I marked the "working" segments on the following rough figure.
+
+![](working_segments.svg "The segments that can be lit are marked as red, the dead segments are black.")
+
+All the segments that are actually used by the radio clock light up, but no other. For example, the first digit only displays `1`, `2` or nothing, so they didn't need all segments to be working, and spared one.
+I created a table to kind of illustrate how this LED display is wired up internally.
+
+![](display.jpg "The display. Again, I assigned numbers to the lines.")
+
+Actually, this display has three cathodes. I assume the third was added for the "non-standard" segments (but it isn't really used here). They are the first 3 pins, so I'll identify them by this.
+I'm also using [the standard labels for the 7-segment display segments](https://commons.wikimedia.org/wiki/File:7_segment_display_labeled.svg). 
+
+| Pin | Digit with Cathode 1 | Digit with Cathode 2 | Digit with Cathode 3           |
+|-----|----------------------|----------------------|--------------------------------|
+| 4   |                      |                      | Alarm indicator at bottom left |
+| 5   |                      |                      |                                |
+| 6   |                      | 10's hr B            |                                |
+| 7   | 10's hr A            | 10's hr G            |                                |
+| 8   | 10's hr D            | 10's hr E            |                                |
+| 9   | Hr E                 | 10's hr C            |                                |
+| 10  | Hr G                 | Hr B                 |                                |
+| 11  |                      |                      |                                |
+| 12  | Hr D                 | Hr C                 |                                |
+| 13  | Hr F                 | Hr A                 |                                |
+| 14  |                      |                      |                                |
+| 15  | 10's min A           | 10's min F           |                                |
+| 16  | 10's min B           | 10's min G           |                                |
+| 17  | 10's min C           | 10's min D           |                                |
+| 18  | Min E                | 10's min E           |                                |
+| 19  | Min G                | Min B                |                                |
+| 20  | Min D                | Min C                |                                |
+| 21  | Min F                | Min A                |                                |
+| 22  | Colon                |                      |                                |
+
+That's about it for the display.
+I'm a little disappointed, because when I first saw the display, I was hoping to be able to illuminate all the segments on it, so I could put more information on it. However, now It seems like I can't even write `boot` on it.
+I could probably wire up the missing segments if I tried to disassemble the display, but the plastic is fused to the board, so it definitely won't be easy.
+I also need the ability to dim the display, so it's not so bright at night. PWM on a duplex display seems to be a bit complicated though.
+With all that in mind, I'm not sure if it's worth keeping the display as it is, or I should be looking for a replacement that's easier to drive and can display more.
+The only reason to keep it is that it seems inconvenient to make a replacement that fits perfectly.
 
 ## Speaker
 
 The speaker, while it's the most important part of this project, it's not very interesting. It's just an inexpensive 0.5&nbsp;W 8&nbsp;Ω speaker.
 
-I connected a tiny LM386 based amplifier to test if it's still working. It sounds a bit crude, but it is indeed capable of emitting sound. I'm not sure if I'm going to keep it, or find a replacement for it, that might sound better. 
+I connected a tiny LM386 based amplifier to test if it's still working. It sounds a bit crude, but it is indeed capable of emitting sound. I'm not sure if I'm going to keep it, or find a replacement for it, that might sound better.
 That problem is for the future. I'm also yet to figure out which amplifier and how I will use, will it be an off-the-shelf board or maybe hack up something? I don't know yet.
 
 # Conclusion
 
-And that concludes the first part of my new alarm clock in the making. 
-I've decided to write blog posts about it as the project progresses, so maybe I can go into more detail in each post, and maybe I'll actually write them and not just start them and never finish them.  
+This concludes the first part of my new alarm clock in the making.
+I've decided to write blog posts about it as the project progresses, so maybe I can go into more detail in each post, and maybe I'll actually write them and not just start them and never finish them.
 
 This post really is just a first step for this project. As I proceed, I plan to post more updates about it, and try to keep them a little shorter.
 
