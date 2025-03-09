@@ -4,6 +4,8 @@ from typing import Generator, Optional
 
 import marko
 import marko.inline
+from marko import MarkoExtension
+from marko.ext import gfm
 
 from .config import Config
 from .meta import load_meta_file
@@ -43,7 +45,16 @@ class CustomRenderer(marko.HTMLRenderer):
         return f"""<figure>{figure_content}{figcaption}</figure>"""
 
 
-_MD = marko.Markdown(renderer=CustomRenderer)
+ReducedGFM = MarkoExtension(  # I only need table support now
+    elements=[
+        gfm.elements.Table,
+        gfm.elements.TableRow,
+        gfm.elements.TableCell,
+    ],
+    renderer_mixins=[gfm.renderer.GFMRendererMixin],
+)
+
+_MD = marko.Markdown(renderer=CustomRenderer, extensions=[ReducedGFM])
 
 
 def _extract_all_src(root) -> list:
