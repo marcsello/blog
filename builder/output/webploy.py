@@ -116,7 +116,8 @@ class WebployOutput(OutputBase):
             raise self._uploader.exc
 
         if self._uploader.resp.status_code != 201:
-            raise Exception("upload failed")
+            print(" > upload error:", self._uploader.resp.status_code, self._uploader.resp.content.decode("utf-8"))
+            raise Exception("tar upload failed")
 
     def close(self):
         print(" > closing...")
@@ -125,7 +126,7 @@ class WebployOutput(OutputBase):
         r = self._s.post(f"sites/{self._site_name}/deployments/{self._deployment_id}/finish", timeout=30)
 
         if r.status_code != 200:
-            print(" > error:", r.status_code, r.content.decode("utf-8"))
+            print(" > close error:", r.status_code, r.content.decode("utf-8"))
             raise Exception("unexpected status code", r.status_code)
 
         print(" > finished:", r.content.decode("utf-8"))
@@ -142,7 +143,7 @@ class WebployOutput(OutputBase):
         r = self._s.delete(f"sites/{self._site_name}/deployments/{self._deployment_id}", timeout=30)
 
         if r.status_code != 204:
-            print(" > error:", r.status_code, r.content.decode("utf-8"))
+            print(" > delete error:", r.status_code, r.content.decode("utf-8"))
             raise Exception("unexpected status code", r.status_code)
 
         print(" > aborted deployment")
