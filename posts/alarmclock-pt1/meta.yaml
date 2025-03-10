@@ -1,8 +1,8 @@
 ---
 title: "My Alarm Clock Runs Linux - Part 1"
-published: false
+published: true
 cover_override: "clock.jpg"
-publish_date: "2025-02-23"
+publish_date: "2025-03-10"
 tags:
   - alarmclock
   - teardown
