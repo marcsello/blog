@@ -1,9 +1,9 @@
-<!-- cspell:ignore Cellux Elta-->
+<!-- cspell:ignore Cellux Elta ferrit datasheet powerline -->
 So, it all started with a [Stanford Lifestyle Medicine article](https://longevity.stanford.edu/lifestyle/2024/05/30/what-excessive-screen-time-does-to-the-adult-brain/) about "What Excessive Screen Time Does to the Adult Brain".
 You wouldn't have guessed it, but it's not healthy! I know, I know, this groundbreaking discovery probably won't change the world on its own. The awesome thing about this article however is that it actually gives you some advice on how to improve your life in this regard.
 
 Their advice, which I took by heart, is "No Screen Time for the First Hour of the Day". Actually, they recommended this as a practice for a month, but I'm practicing it for half a year now.
-I won't say it changed my life or anything, it's just something I've been doing ever since. I've been also thinking of stepping up my game for a while: **baning smartphones from the bedroom altogether**.
+I won't say it changed my life or anything, it's just something I've been doing ever since. I've been also thinking of stepping up my game for a while: **banning smartphones from the bedroom altogether**.
 
 I'm thinking of setting up a nice charging station somewhere outside and leaving my phone there while I sleep. I could also get some nice bedroom lamp, and maybe read a book or something instead of being on my phone before sleep.
 But there's one thing that prevents me from doing that...
@@ -71,7 +71,7 @@ Peeking inside the machine, we can see that there is a main circuit board which 
 
 The PCB has some typical radio parts on it, like the ferrit rod antenna for AM reception, the variable capacitor thingy for tuning, and other stuff. Pretty typical cheap radio setup going on here, nothing unusual.
 
-There is also a (relative to modern things) big transformator. Indeed, no fancy switching power supply here.
+There is also a (relative to modern things) big transformer. Indeed, no fancy switching power supply here.
 There are also four identical looking diodes next to a large capacitor on the main board. I assume this is how the DC power is produced for the parts requiring it.
 
 ![Tesco Value CR-106 clock radio taken apart a little more](internals2.jpg "This is as far as the wires allow to take it apart. The screws holding the main board and the large transistor are visible.")
