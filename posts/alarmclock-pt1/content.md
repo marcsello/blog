@@ -199,7 +199,7 @@ I created a table to kind of illustrate how this LED display is wired up interna
 ![The display with it's ribbon cable, the lines are numbered from left to right of the ribbon cable. The ribbon cable has 21 lines. There is an extra wire on the right marked as 22](display.jpg "The display. Again, I assigned numbers to the lines.")
 
 Actually, this display has three cathodes. I assume the third was added for the "non-standard" segments (but it isn't really used here). They are the first 3 pins, so I'll identify them by this.
-I'm also using [the standard labels for the 7-segment display segments](https://commons.wikimedia.org/wiki/File:7_segment_display_labeled.svg). 
+I'm also using [the standard labels for the 7-segment display segments](https://commons.wikimedia.org/wiki/File:7_segment_display_labeled.svg).
 
 | Pin | Digit with Cathode 1 | Digit with Cathode 2 | Digit with Cathode 3           |
 |-----|----------------------|----------------------|--------------------------------|
